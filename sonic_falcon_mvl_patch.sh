@@ -184,6 +184,9 @@ misc_workarounds()
     cp -rv device/marvell/x86_64-marvell_db98cx8580_32cd-r0/FALCON32X25G/* device/marvell/x86_64-marvell_db98cx8580_32cd-r0/db98cx8580_32cd/
     cp -rv device/marvell/arm64-marvell_db98cx8580_16cd-r0/FALCON16X25G/* device/marvell/arm64-marvell_db98cx8580_16cd-r0/db98cx8580_16cd/
     cp -rv device/marvell/arm64-marvell_db98cx8580_32cd-r0/FALCON32X25G/* device/marvell/arm64-marvell_db98cx8580_32cd-r0/db98cx8580_32cd/
+
+    #7 ARM64 jessie target
+    sed -i 's/apt-get update/apt-get -o Acquire::Check-Valid-Until=false update/'g sonic-slave-jessie/Dockerfile.j2
 }
 
 main()
