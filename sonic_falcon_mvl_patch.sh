@@ -179,11 +179,13 @@ misc_workarounds()
     sed -i 's/"cir":"600",/"cir":"6000",/g' src/sonic-swss/swssconfig/sample/00-copp.config.json
     sed -i 's/"cbs":"600",/"cbs":"6000",/g' src/sonic-swss/swssconfig/sample/00-copp.config.json
 
-    #6 Overwrite default profile with 32x25G
-    cp -rv device/marvell/x86_64-marvell_db98cx8580_16cd-r0/FALCON16X25G/* device/marvell/x86_64-marvell_db98cx8580_16cd-r0/db98cx8580_16cd/
+    #6 Overwrite default profile with 32x25G 12.8T
     cp -rv device/marvell/x86_64-marvell_db98cx8580_32cd-r0/FALCON32X25G/* device/marvell/x86_64-marvell_db98cx8580_32cd-r0/db98cx8580_32cd/
-    cp -rv device/marvell/arm64-marvell_db98cx8580_16cd-r0/FALCON16X25G/* device/marvell/arm64-marvell_db98cx8580_16cd-r0/db98cx8580_16cd/
     cp -rv device/marvell/arm64-marvell_db98cx8580_32cd-r0/FALCON32X25G/* device/marvell/arm64-marvell_db98cx8580_32cd-r0/db98cx8580_32cd/
+
+    #7 Overwrite default profile with 16x25G 6.4T
+    cp -rv device/marvell/x86_64-marvell_db98cx8580_16cd-r0/FALCON16X25G/* device/marvell/x86_64-marvell_db98cx8580_16cd-r0/db98cx8580_16cd/
+    cp -rv device/marvell/arm64-marvell_db98cx8580_16cd-r0/FALCON16X25G/* device/marvell/arm64-marvell_db98cx8580_16cd-r0/db98cx8580_16cd/
 
     #7 ARM64 jessie target
     sed -i 's/apt-get update/apt-get -o Acquire::Check-Valid-Until=false update/'g sonic-slave-jessie/Dockerfile.j2
