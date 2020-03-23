@@ -180,7 +180,7 @@ misc_workarounds()
     sed -i 's/"cbs":"600",/"cbs":"6000",/g' src/sonic-swss/swssconfig/sample/00-copp.config.json
 
     #6 Overwrite default profile with 32x25G
-    cp -rv device/marvell/x86_64-marvell_db98cx8580_16cd-r0/FALCON32X25G/* device/marvell/x86_64-marvell_db98cx8580_16cd-r0/db98cx8580_16cd/
+    cp -rv device/marvell/x86_64-marvell_db98cx8580_16cd-r0/FALCON16X25G/* device/marvell/x86_64-marvell_db98cx8580_16cd-r0/db98cx8580_16cd/
     cp -rv device/marvell/x86_64-marvell_db98cx8580_32cd-r0/FALCON32X25G/* device/marvell/x86_64-marvell_db98cx8580_32cd-r0/db98cx8580_32cd/
     cp -rv device/marvell/arm64-marvell_db98cx8580_16cd-r0/FALCON16X25G/* device/marvell/arm64-marvell_db98cx8580_16cd-r0/db98cx8580_16cd/
     cp -rv device/marvell/arm64-marvell_db98cx8580_32cd-r0/FALCON32X25G/* device/marvell/arm64-marvell_db98cx8580_32cd-r0/db98cx8580_32cd/
