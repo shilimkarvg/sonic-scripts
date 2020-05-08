@@ -3,6 +3,7 @@
 # Copyright (c) Marvell, Inc. All rights reservered. Confidential.
 # Description: Applying open PRs needed for ARM arch compilation
 
+set -e
 
 #
 # patch script for ARM64 Falcon board
@@ -12,18 +13,22 @@
 # CONFIGURATIONS:-
 #
 
-SONIC_DEC14_COMMIT="1de13ca5fd88f4d0e384a73d2964aea8740296c1"
+SONIC_201911_MAY06_COMMIT="5e17126ffe42b9c03140d4131e7ae6c41fa2b02d"
 
-declare -a PATCHES=(P1 P2 P3 P4)
+declare -a PATCHES=(P1 P2 P3 P4 P5 P6)
 
 url="https://github.com/Azure"
 urlsai="https://patch-diff.githubusercontent.com/raw/opencomputeproject"
 
 
-declare -A P1=( [NAME]=sonic-buildimage [DIR]=. [PR]="3687 3734 3955 3963 3941 4016 4043 4066 4081 4168 4205 4280 4293" [URL]="$url" [PREREQ]="" [POSTREQ]="frr_cfg")
-declare -A P2=( [NAME]=sonic-swss [DIR]=src/sonic-swss [PR]="1162 1163 1167 1168 1190" [URL]="$url" [PREREQ]="" )
-declare -A P3=( [NAME]=sonic-utilities [DIR]=src/sonic-utilities [PR]="811" [URL]="$url" [PREREQ]="util_cfg" )
+#declare -A P1=( [NAME]=sonic-buildimage [DIR]=. [PR]="3687 3734 3955 3963 3941 4016 4043 4066 4081 4168 4205 4280 4293 4535" [URL]="$url" [PREREQ]="" [POSTREQ]="")
+declare -A P1=( [NAME]=sonic-buildimage [DIR]=. [PR]="3734 3955 3963 3941 4043 4168 4205 4280 4293 4535" [URL]="$url" [PREREQ]="" [POSTREQ]="")
+#declare -A P2=( [NAME]=sonic-swss [DIR]=src/sonic-swss [PR]="1162 1163 1167 1168 1190" [URL]="$url" [PREREQ]="swss_workaround" )
+declare -A P2=( [NAME]=sonic-swss [DIR]=src/sonic-swss [PR]="1162 1163 1167 " [URL]="$url" [PREREQ]="swss_workaround" )
+declare -A P3=( [NAME]=sonic-utilities [DIR]=src/sonic-utilities [PR]="" [URL]="$url" [PREREQ]="util_cfg" )
 declare -A P4=( [NAME]=sonic-linux-kernel [DIR]=src/sonic-linux-kernel [PR]="125" [URL]="$url" [PREREQ]="prereq_kernel" )
+declare -A P5=( [NAME]=sonic-mgmt-framework [DIR]=src/sonic-mgmt-framework [PR]="46" [URL]="$url" [PREREQ]="" )
+declare -A P6=( [NAME]=sonic-platform-common [DIR]=src/sonic-platform-common [PR]="" [URL]="$url" [PREREQ]="" )
 
 #
 # END of CONFIGURATIONS
@@ -33,6 +38,7 @@ declare -A P4=( [NAME]=sonic-linux-kernel [DIR]=src/sonic-linux-kernel [PR]="125
 CUR_DIR=$(basename `pwd`)
 LOG_FILE=patches_result.log
 FULL_PATH=`pwd`
+SCRIPT_DIR=$(dirname $0)
 
 log()
 {
@@ -42,10 +48,12 @@ log()
 
 pre_patch_help()
 {
+    log ""
+    log ""
     log "STEPS TO BUILD:"
     log "git clone https://github.com/Azure/sonic-buildimage.git"
     log "cd sonic-buildimage"
-    log "git checkout $SONIC_DEC14_COMMIT"
+    log "git checkout $SONIC_201911_MAY06_COMMIT"
     log "make init"
 
     log "<<Apply patches using patch script>>" 
@@ -54,33 +62,43 @@ pre_patch_help()
     log "<<FOR ARM64>> make configure PLATFORM=marvell-arm64 PLATFORM_ARCH=arm64"
     log "<<FOR INTEL>> make configure PLATFORM=marvell"
     log "make all"
+    log ""
+    log ""
 }
 
 
 prereq_kernel()
 {
-    git fetch --all --tags
-    git pull origin master
-    git checkout master
+    #git fetch --all --tags
+    #git pull origin master
+    #git checkout master
     #git checkout 90f7c8480c583734832feee6cc232fe5eeb71422
-    git checkout 6650d4eb8d8c1ea4007145e5ffe17c3821298da2
-    git revert --no-edit 66e9dfa591369782eff63f1de09818df3a941b29
+    #git checkout 6650d4eb8d8c1ea4007145e5ffe17c3821298da2
+    #git revert --no-edit 66e9dfa591369782eff63f1de09818df3a941b29
+
+    sed -i '/net-psample-fix-skb-over-panic.patch/d' patch/series
 }
 
 util_cfg()
 {
     git fetch --all --tags
-    git pull origin master
+    #git pull origin master
     git checkout master
-    git checkout db58367dedd88c2f7c0b8e397ecb1e08548662fa
-
+    git checkout 9a9495579870943c96ce865dacbd23df53643666
 }
 
 frr_cfg()
 {
     wget https://patch-diff.githubusercontent.com/raw/Azure/sonic-buildimage/pull/4066.diff
+    patch -p1 --dry-run < 4066.diff
     patch -p1 < 4066.diff
     rm 4066.diff
+}
+
+swss_workaround()
+{
+    # PR 1190 fails, alternative.
+    sed -i 's/platform == MLNX_PLATFORM_SUBSTRING/platform == MRVL_PLATFORM_SUBSTRING/g' orchagent/aclorch.cpp
 }
 
 apply_patches()
@@ -139,6 +157,7 @@ create_temp_rclocal_patch()
 {
 cat <<EOF > /tmp/rclocal_fix
 echo "Marvell: Executing Workarounds !!!!"
+python /etc/ent.py
 
 echo "Switch Mac Address Update"
 MAC_ADDR=\`ip link show eth0 | grep ether | awk '{print $2}'\`
@@ -165,7 +184,9 @@ misc_workarounds()
     #1 Disable Telemetry
     sed -i 's/ENABLE_SYSTEM_TELEMETRY = y/ENABLE_SYSTEM_TELEMETRY = N/g' rules/config
 
-    #2 TODO: Add Entropy workaround for ARM64
+    #2 Add Entropy workaround for ARM64
+    cp ${SCRIPT_DIR}/ent.py files/image_config/platform/
+    echo 'sudo cp $IMAGE_CONFIGS/platform/ent.py $FILESYSTEM_ROOT/etc/' >> files/build_templates/sonic_debian_extension.j2
 
     #3 Add ipv4/ipv6 arp gc_thresh
     create_temp_rclocal_patch
@@ -179,19 +200,45 @@ misc_workarounds()
     sed -i 's/#define SELECT_TIMEOUT 1000/#define SELECT_TIMEOUT 1999999/g' src/sonic-swss/orchagent/orchdaemon.cpp
 
     #5 copp configuration for jumbo
-    sed -i 's/"cir":"600",/"cir":"6000",/g' src/sonic-swss/swssconfig/sample/00-copp.config.json
-    sed -i 's/"cbs":"600",/"cbs":"6000",/g' src/sonic-swss/swssconfig/sample/00-copp.config.json
+    # Not needed in Master
+    #sed -i 's/"cir":"600",/"cir":"6000",/g' src/sonic-swss/swssconfig/sample/00-copp.config.json
+    #sed -i 's/"cbs":"600",/"cbs":"6000",/g' src/sonic-swss/swssconfig/sample/00-copp.config.json
 
-    #6 Overwrite default profile with 32x25G 12.8T
-    cp -rv device/marvell/x86_64-marvell_db98cx8580_32cd-r0/FALCON32X25G/* device/marvell/x86_64-marvell_db98cx8580_32cd-r0/db98cx8580_32cd/
-    cp -rv device/marvell/arm64-marvell_db98cx8580_32cd-r0/FALCON32X25G/* device/marvell/arm64-marvell_db98cx8580_32cd-r0/db98cx8580_32cd/
-
-    #7 Overwrite default profile with 16x25G 6.4T
-    cp -rv device/marvell/x86_64-marvell_db98cx8580_16cd-r0/FALCON16X25G/* device/marvell/x86_64-marvell_db98cx8580_16cd-r0/db98cx8580_16cd/
-    cp -rv device/marvell/arm64-marvell_db98cx8580_16cd-r0/FALCON16X25G/* device/marvell/arm64-marvell_db98cx8580_16cd-r0/db98cx8580_16cd/
+    #6 Copy hwsku files from xps repo 
+    rm -fr device/marvell/arm64-marvell_db98cx8580_32cd-r0 || true
+    cp -dr ${SCRIPT_DIR}/../sai_cpss/sonic/arm64-marvell_db98cx8580_32cd-r0 device/marvell/arm64-marvell_db98cx8580_32cd-r0
+    rm -fr device/marvell/x86_64-marvell_db98cx8580_32cd-r0 || true
+    cp -dr ${SCRIPT_DIR}/../sai_cpss/sonic/arm64-marvell_db98cx8580_32cd-r0 device/marvell/x86_64-marvell_db98cx8580_32cd-r0
+    rm -fr device/marvell/arm64-marvell_db98cx8540_16cd-r0 || true
+    cp -dr ${SCRIPT_DIR}/../sai_cpss/sonic/arm64-marvell_db98cx8540_16cd-r0 device/marvell/arm64-marvell_db98cx8540_16cd-r0
+    rm -fr device/marvell/x86_64-marvell_db98cx8540_16cd-r0 || true
+    cp -dr ${SCRIPT_DIR}/../sai_cpss/sonic/arm64-marvell_db98cx8540_16cd-r0 device/marvell/x86_64-marvell_db98cx8540_16cd-r0
 
     #7 ARM64 jessie target
-    sed -i 's/apt-get update/apt-get -o Acquire::Check-Valid-Until=false update/'g sonic-slave-jessie/Dockerfile.j2
+    sed -i 's/apt-get update/apt-get -o Acquire::Check-Valid-Until=false update/g' sonic-slave-jessie/Dockerfile.j2
+
+    #8 TODO: Docker version
+    sed -i 's/DOCKER_VERSION=18.06.3~ce~3-0~debian/DOCKER_VERSION=5:19.03.6~3-0~debian-$IMAGE_DISTRO/g' build_debian.sh
+
+    #9 TODO: Intel USB access
+    patch -p1 < ${SCRIPT_DIR}/sonic_usb_install_slow.patch
+
+    # LAST -- remove dirty from Image version
+    # git add -u && git commit -m "Committing Marvell Workarounds" || echo "Code is clean, no commit required"
+}
+
+sonicbuild_prereq()
+{
+    #1 Add user permission to docker
+    U=`whoami`
+    sudo setfacl -m user:${U}:rw /var/run/docker.sock
+    sudo usermod -aG sudo ${U}
+    sudo usermod -aG docker ${U}
+
+    #2 Install j2
+    sudo apt-get install -y python-pip
+    sudo pip install --force-reinstall --upgrade jinja2>=2.10
+    sudo pip install j2cli
 }
 
 main()
@@ -203,9 +250,9 @@ main()
         exit
     fi
 
-    if [ "${sonic_buildimage_commit}" != "$SONIC_DEC14_COMMIT" ]; then
-        log "Checkout Dec14 sonic-buildimage commit to proceed"
-        log "git checkout ${SONIC_DEC14_COMMIT}"
+    if [ "${sonic_buildimage_commit}" != "$SONIC_201911_MAY06_COMMIT" ]; then
+        log "Checkout sonic-buildimage commit as below to proceed"
+        log "git checkout ${SONIC_201911_MAY06_COMMIT}"
         pre_patch_help
         exit
     fi
@@ -215,6 +262,8 @@ main()
     apply_patches 
 
     misc_workarounds
+
+    sonicbuild_prereq
 }
 
 main $@
