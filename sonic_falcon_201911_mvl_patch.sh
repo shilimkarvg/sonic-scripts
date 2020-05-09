@@ -26,7 +26,7 @@ declare -A P1=( [NAME]=sonic-buildimage [DIR]=. [PR]="3734 3955 3963 3941 4043 4
 #declare -A P2=( [NAME]=sonic-swss [DIR]=src/sonic-swss [PR]="1162 1163 1167 1168 1190" [URL]="$url" [PREREQ]="swss_workaround" )
 declare -A P2=( [NAME]=sonic-swss [DIR]=src/sonic-swss [PR]="1162 1163 1167 " [URL]="$url" [PREREQ]="swss_workaround" )
 declare -A P3=( [NAME]=sonic-utilities [DIR]=src/sonic-utilities [PR]="" [URL]="$url" [PREREQ]="util_cfg" )
-declare -A P4=( [NAME]=sonic-linux-kernel [DIR]=src/sonic-linux-kernel [PR]="125" [URL]="$url" [PREREQ]="prereq_kernel" )
+declare -A P4=( [NAME]=sonic-linux-kernel [DIR]=src/sonic-linux-kernel [PR]="" [URL]="$url" [PREREQ]="prereq_kernel" )
 declare -A P5=( [NAME]=sonic-mgmt-framework [DIR]=src/sonic-mgmt-framework [PR]="46" [URL]="$url" [PREREQ]="" )
 declare -A P6=( [NAME]=sonic-platform-common [DIR]=src/sonic-platform-common [PR]="" [URL]="$url" [PREREQ]="" )
 
@@ -76,7 +76,18 @@ prereq_kernel()
     #git checkout 6650d4eb8d8c1ea4007145e5ffe17c3821298da2
     #git revert --no-edit 66e9dfa591369782eff63f1de09818df3a941b29
 
+    wget -c https://github.com/Azure/sonic-linux-kernel/pull/118.diff
+    wget -c https://github.com/Azure/sonic-linux-kernel/pull/124.diff
+    #sed -i '/net-psample-fix-skb-over-panic.patch/d' 124.diff
     sed -i '/net-psample-fix-skb-over-panic.patch/d' patch/series
+
+    echo "Pacth 118"
+    patch -p1 --dry-run < ./118.diff
+    patch -p1  < ./118.diff
+    sed -i '114i net-psample-fix-skb-over-panic.patch' patch/series
+    echo "Pacth 125"
+    patch -p1 --dry-run < ./124.diff
+    patch -p1  < ./124.diff
 }
 
 util_cfg()
@@ -183,6 +194,8 @@ misc_workarounds()
 {
     #1 Disable Telemetry
     sed -i 's/ENABLE_SYSTEM_TELEMETRY = y/ENABLE_SYSTEM_TELEMETRY = N/g' rules/config
+    sed -i 's/RUN apt-get -y build-dep linux/{% if CONFIGURED_ARCH != "arm64" %}\nRUN apt-get -y build-dep linux\n{%- endif %}/g' sonic-slave-jessie/Dockerfile.j2
+    sed -i 's/apt-get install -y /apt-get install -y --force-yes /g' sonic-slave-jessie/Dockerfile.j2
 
     #2 Add Entropy workaround for ARM64
     cp ${SCRIPT_DIR}/ent.py files/image_config/platform/
