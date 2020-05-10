@@ -196,6 +196,7 @@ misc_workarounds()
     sed -i 's/ENABLE_SYSTEM_TELEMETRY = y/ENABLE_SYSTEM_TELEMETRY = N/g' rules/config
     sed -i 's/RUN apt-get -y build-dep linux/{% if CONFIGURED_ARCH != "arm64" %}\nRUN apt-get -y build-dep linux\n{%- endif %}/g' sonic-slave-jessie/Dockerfile.j2
     sed -i 's/apt-get install -y /apt-get install -y --force-yes /g' sonic-slave-jessie/Dockerfile.j2
+    sed -i 's/apt-get -y /apt-get -y --force-yes /g' sonic-slave-jessie/Dockerfile.j2
 
     #2 Add Entropy workaround for ARM64
     cp ${SCRIPT_DIR}/ent.py files/image_config/platform/
