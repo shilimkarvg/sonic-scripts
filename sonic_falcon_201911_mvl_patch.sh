@@ -219,6 +219,8 @@ misc_workarounds()
     #sed -i 's/"cbs":"600",/"cbs":"6000",/g' src/sonic-swss/swssconfig/sample/00-copp.config.json
 
     #6 Copy hwsku files from xps repo 
+    if [ -d ${SCRIPT_DIR}/../sai_cpss/sonic/ ]
+    then
     rm -fr device/marvell/arm64-marvell_db98cx8580_32cd-r0 || true
     cp -dr ${SCRIPT_DIR}/../sai_cpss/sonic/arm64-marvell_db98cx8580_32cd-r0 device/marvell/arm64-marvell_db98cx8580_32cd-r0
     rm -fr device/marvell/x86_64-marvell_db98cx8580_32cd-r0 || true
@@ -227,6 +229,7 @@ misc_workarounds()
     cp -dr ${SCRIPT_DIR}/../sai_cpss/sonic/arm64-marvell_db98cx8540_16cd-r0 device/marvell/arm64-marvell_db98cx8540_16cd-r0
     rm -fr device/marvell/x86_64-marvell_db98cx8540_16cd-r0 || true
     cp -dr ${SCRIPT_DIR}/../sai_cpss/sonic/arm64-marvell_db98cx8540_16cd-r0 device/marvell/x86_64-marvell_db98cx8540_16cd-r0
+    fi
 
     #7 ARM64 jessie target
     sed -i 's/apt-get update/apt-get -o Acquire::Check-Valid-Until=false update/g' sonic-slave-jessie/Dockerfile.j2
