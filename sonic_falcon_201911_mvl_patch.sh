@@ -22,7 +22,7 @@ urlsai="https://patch-diff.githubusercontent.com/raw/opencomputeproject"
 
 
 #declare -A P1=( [NAME]=sonic-buildimage [DIR]=. [PR]="3687 3734 3955 3963 3941 4016 4043 4066 4081 4168 4205 4280 4293 4535" [URL]="$url" [PREREQ]="" [POSTREQ]="")
-declare -A P1=( [NAME]=sonic-buildimage [DIR]=. [PR]="3734 3955 3963 3941 4043 4168 4205 4280 4293 4535" [URL]="$url" [PREREQ]="" [POSTREQ]="")
+declare -A P1=( [NAME]=sonic-buildimage [DIR]=. [PR]="3734 3955 3963 3941 4043 4168 4205 4280 4293 4535" [URL]="$url" [PREREQ]="" [POSTREQ]="partial_pr_wa")
 #declare -A P2=( [NAME]=sonic-swss [DIR]=src/sonic-swss [PR]="1162 1163 1167 1168 1190" [URL]="$url" [PREREQ]="swss_workaround" )
 declare -A P2=( [NAME]=sonic-swss [DIR]=src/sonic-swss [PR]="1162 1163 1167 " [URL]="$url" [PREREQ]="swss_workaround" )
 declare -A P3=( [NAME]=sonic-utilities [DIR]=src/sonic-utilities [PR]="" [URL]="$url" [PREREQ]="util_cfg" )
@@ -66,6 +66,12 @@ pre_patch_help()
     log ""
 }
 
+partial_pr_wa()
+{
+    sed -i 's/amd64/$(CONFIGURED_ARCH)/g' rules/sonic-mgmt-framework.mk
+    sed -i 's/amd64/$(CONFIGURED_ARCH)/g' rules/iptables.mk
+    sed -i 's/amd64/$(CONFIGURED_ARCH)/g' src/iptables/Makefile
+}
 
 prereq_kernel()
 {
