@@ -244,7 +244,11 @@ misc_workarounds()
     sed -i 's/apt-get update/apt-get -o Acquire::Check-Valid-Until=false update/g' sonic-slave-jessie/Dockerfile.j2
 
     #8 TODO: Docker version
-    sed -i 's/DOCKER_VERSION=18.06.3~ce~3-0~debian/DOCKER_VERSION=5:19.03.6~3-0~debian-$IMAGE_DISTRO/g' build_debian.sh
+    sed -i 's/DOCKER_VERSION=18.06.3~ce~3-0~debian/DOCKER_VERSION=5:19.03.6~3-0~debian-stretch/g' build_debian.sh
+
+    #9 Kenrel version change
+    sed -i 's/4.9.0-9-2/4.9.0-11-2/g' platform/marvell-arm64/sonic_fit.its
+    sed -i 's/4.9.0-9-2/4.9.0-11-2/g' platform/marvell-arm64/platform.conf
 
     #9 TODO: Intel USB access
     patch -p1 < ${SCRIPT_DIR}/sonic_usb_install_slow.patch
