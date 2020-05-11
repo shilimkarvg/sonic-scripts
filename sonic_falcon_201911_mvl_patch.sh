@@ -199,7 +199,10 @@ EOF
 misc_workarounds()
 {
     #1 Disable Telemetry
-    sed -i 's/ENABLE_SYSTEM_TELEMETRY = y/ENABLE_SYSTEM_TELEMETRY = N/g' rules/config
+    if [[ "$FULL_PATH" == *ARM64* ]]; then
+        sed -i 's/ENABLE_SYSTEM_TELEMETRY = y/ENABLE_SYSTEM_TELEMETRY = N/g' rules/config
+        sed -i 's/ENABLE_MGMT_FRAMEWORK = y/ENABLE_MGMT_FRAMEWORK = N/g' rules/config
+    fi
     sed -i 's/RUN apt-get -y build-dep linux/{% if CONFIGURED_ARCH != "arm64" %}\nRUN apt-get -y build-dep linux\n{%- endif %}/g' sonic-slave-jessie/Dockerfile.j2
     sed -i 's/apt-get install -y /apt-get install -y --force-yes /g' sonic-slave-jessie/Dockerfile.j2
     sed -i 's/apt-get -y /apt-get -y --force-yes /g' sonic-slave-jessie/Dockerfile.j2
