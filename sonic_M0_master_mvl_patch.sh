@@ -81,3 +81,6 @@ done
 # Change docker spawn wait time to 4 sec
 #cd sonic-buildimage
 sed -i 's/sleep 1/sleep 4/g' Makefile.work
+
+#WA - changing azure-storage version -0.36.0
+sed -i 's/azure-storage/azure-storage==0.36.0/g' files/build_templates/sonic_debian_extension.j2
