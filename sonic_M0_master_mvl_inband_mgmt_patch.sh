@@ -21,7 +21,7 @@ url="https://github.com/Azure"
 urlsai="https://patch-diff.githubusercontent.com/raw/opencomputeproject"
 
 declare -a PATCHES=(P1 P2 P3 P4 P5)
-declare -A P1=( [NAME]=sonic-buildimage [DIR]=. [PR]="3392 3687 4510 4575 4535 4522" [URL]="$url" [PREREQ]="" [POSTREQ]="")
+declare -A P1=( [NAME]=sonic-buildimage [DIR]=. [PR]="3392 3687 4510 4575 4535 4522 4650" [URL]="$url" [PREREQ]="" [POSTREQ]="")
 declare -A P2=( [NAME]=sonic-swss [DIR]=src/sonic-swss [PR]="1162 1281" [URL]="$url" [PREREQ]="" )
 declare -A P3=( [NAME]=sonic-mgmt-framework [DIR]=src/sonic-mgmt-framework [PR]="46" [URL]="$url" [PREREQ]="" )
 declare -A P4=( [NAME]=sonic-linux-kernel [DIR]=src/sonic-linux-kernel [PR]="134" [URL]="$url" [PREREQ]="" )
