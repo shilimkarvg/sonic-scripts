@@ -81,3 +81,27 @@ done
 # Change docker spawn wait time to 4 sec
 #cd sonic-buildimage
 sed -i 's/sleep 1/sleep 4/g' Makefile.work
+
+# WA to restart networking for inband mgmt
+sed -i '/build_version/i \
+inband_mgmt(){\
+ while :; do\
+   ip -br link show eth0 2> /dev/null\
+   if [ $? -eq 0 ]; then\
+       ip -br address show eth0 | grep -qw "UP" 2>/dev/null\
+       if [ $? -ne 0 ]; then\
+         systemctl restart networking\
+         ip -br link show eth0 | grep -q "eth0@Eth" 2> /dev/null\
+         if [ $? -eq 0 ]; then\
+           intf=$(ip link show eth0 | grep eth0 | cut -d@ -f2| cut -d: -f1)\
+           config interface startup $intf\
+         fi\
+       else\
+         sleep 120\
+       fi\
+   else\
+     sleep 10\
+   fi\
+ done\
+}\
+inband_mgmt &' files/image_config/platform/rc.local
