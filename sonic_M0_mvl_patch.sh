@@ -32,7 +32,8 @@ prereq_kernel()
     git fetch --all --tags
     git pull origin master
     git checkout master
-    git checkout 90f7c8480c583734832feee6cc232fe5eeb71422
+    # git checkout 90f7c8480c583734832feee6cc232fe5eeb71422
+    git checkout 231bebb41b86c9f744adc86972773d75fd4a2a2a
     git revert --no-edit 66e9dfa591369782eff63f1de09818df3a941b29
 }
 util_cfg()
