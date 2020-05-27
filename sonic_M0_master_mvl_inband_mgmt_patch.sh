@@ -90,15 +90,14 @@ inband_mgmt(){\
    if [ $? -eq 0 ]; then\
        ip -br address show eth0 | grep -qw "UP" 2>/dev/null\
        if [ $? -ne 0 ]; then\
-         systemctl restart networking\
          ip -br link show eth0 | grep -q "eth0@Eth" 2> /dev/null\
          if [ $? -eq 0 ]; then\
+           systemctl restart networking\
            intf=$(ip link show eth0 | grep eth0 | cut -d@ -f2| cut -d: -f1)\
            config interface startup $intf\
          fi\
-       else\
-         sleep 120\
        fi\
+       sleep 120\
    else\
      sleep 10\
    fi\
