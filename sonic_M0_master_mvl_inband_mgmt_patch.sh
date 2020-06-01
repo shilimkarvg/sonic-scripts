@@ -84,7 +84,14 @@ sed -i 's/sleep 1/sleep 4/g' Makefile.work
 
 # WA to restart networking for inband mgmt
 sed -i '/build_version/i \
-inband_mgmt(){\
+/bin/sh /etc/inband_mgmt' files/image_config/platform/rc.local
+
+sed -i '/platform rc.local/i \
+sudo cp $IMAGE_CONFIGS/platform/inband_mgmt $FILESYSTEM_ROOT/etc/' files/build_templates/sonic_debian_extension.j2
+
+rm files/image_config/platform/inband_mgmt
+echo "#inband_mgmt" > files/image_config/platform/inband_mgmt
+sed -i '$ a inband_mgmt(){\
  while :; do\
    ip -br link show eth0 2> /dev/null\
    if [ $? -eq 0 ]; then\
@@ -103,4 +110,4 @@ inband_mgmt(){\
    fi\
  done\
 }\
-inband_mgmt &' files/image_config/platform/rc.local
+(inband_mgmt > /dev/null)&' files/image_config/platform/inband_mgmt
