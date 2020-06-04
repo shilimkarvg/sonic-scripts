@@ -21,7 +21,7 @@ url="https://github.com/Azure"
 urlsai="https://patch-diff.githubusercontent.com/raw/opencomputeproject"
 
 declare -a PATCHES=(P1 P2 P3 P4 P5)
-declare -A P1=( [NAME]=sonic-buildimage [DIR]=. [PR]="3392 3687 4510 4575 4535 4522 4650" [URL]="$url" [PREREQ]="" [POSTREQ]="")
+declare -A P1=( [NAME]=sonic-buildimage [DIR]=. [PR]="3392 3687 4510 4575 4535 4522 4650 4703" [URL]="$url" [PREREQ]="" [POSTREQ]="")
 declare -A P2=( [NAME]=sonic-swss [DIR]=src/sonic-swss [PR]="1162 1281" [URL]="$url" [PREREQ]="" )
 declare -A P3=( [NAME]=sonic-mgmt-framework [DIR]=src/sonic-mgmt-framework [PR]="46" [URL]="$url" [PREREQ]="" )
 declare -A P4=( [NAME]=sonic-linux-kernel [DIR]=src/sonic-linux-kernel [PR]="134" [URL]="$url" [PREREQ]="" )
@@ -84,6 +84,20 @@ sed -i 's/sleep 1/sleep 4/g' Makefile.work
 
 # WA to restart networking for inband mgmt
 sed -i '/build_version/i \
+/bin/sh /etc/inband_mgmt' files/image_config/platform/rc.local
+
+sed -i '/platform rc.local/i \
+sudo cp $IMAGE_CONFIGS/platform/inband_mgmt $FILESYSTEM_ROOT/etc/' files/build_templates/sonic_debian_extension.j2
+
+rm -f files/image_config/platform/inband_mgmt
+echo "#inband_mgmt" > files/image_config/platform/inband_mgmt
+sed -i '$ a \
+cat /usr/share/sonic/device/armhf-marvell_et6448m_52x-r0/et6448m/profile.ini | grep inbandMgmtPortNum 2> /dev/null\
+if [ $? -ne 0 ]; then\
+echo "Using OOB"\
+exit 0\
+fi\
+echo "Using Inband Mgmt"\
 inband_mgmt(){\
  while :; do\
    ip -br link show eth0 2> /dev/null\
@@ -103,4 +117,4 @@ inband_mgmt(){\
    fi\
  done\
 }\
-inband_mgmt &' files/image_config/platform/rc.local
+(inband_mgmt > /dev/null)&' files/image_config/platform/inband_mgmt
