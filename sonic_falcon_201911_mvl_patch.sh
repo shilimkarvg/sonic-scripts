@@ -208,7 +208,7 @@ misc_workarounds()
     sed -i 's/apt-get -y /apt-get -y --force-yes /g' sonic-slave-jessie/Dockerfile.j2
 
     #2 Add Entropy workaround for ARM64
-    cp ${SCRIPT_DIR}/ent.py files/image_config/platform/
+    cp ${SCRIPT_DIR}/files/ent.py files/image_config/platform/
     echo 'sudo cp $IMAGE_CONFIGS/platform/ent.py $FILESYSTEM_ROOT/etc/' >> files/build_templates/sonic_debian_extension.j2
 
     #3 Add ipv4/ipv6 arp gc_thresh
