@@ -83,7 +83,7 @@ done
 sed -i 's/sleep 1/sleep 4/g' Makefile.work
 
 # WA to restart networking for inband mgmt
-sed -i '$ a inbandMgmtPortNum=47' device/marvell/armhf-marvell_et6448m_52x-r0/et6448m/profile.ini
+sed -i '$ a inbandMgmtPortNum=48' device/marvell/armhf-marvell_et6448m_52x-r0/et6448m/profile.ini
 
 sed -i '/build_version/i \
 /bin/sh /etc/inband_mgmt' files/image_config/platform/rc.local
