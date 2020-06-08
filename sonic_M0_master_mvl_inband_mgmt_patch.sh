@@ -100,8 +100,8 @@ rmmod i2c_mv64xxx
 modprobe i2c_mv64xxx
 modprobe i2c-dev
 modprobe i2c_mux_gpio
-sleep 60
 inband_mgmt(){\
+ sleep 60
  while :; do\
    ip -br link show eth0 2> /dev/null\
    if [ $? -eq 0 ]; then\
