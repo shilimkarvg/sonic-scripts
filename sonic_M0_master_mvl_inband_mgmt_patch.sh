@@ -94,14 +94,14 @@ sudo cp $IMAGE_CONFIGS/platform/inband_mgmt $FILESYSTEM_ROOT/etc/' files/build_t
 rm -f files/image_config/platform/inband_mgmt
 echo "#inband_mgmt" > files/image_config/platform/inband_mgmt
 sed -i '$ a \
-rmmod i2c-dev
-rmmod i2c_mux_gpio
-rmmod i2c_mv64xxx
-modprobe i2c_mv64xxx
-modprobe i2c-dev
-modprobe i2c_mux_gpio
+rmmod i2c-dev\
+rmmod i2c_mux_gpio\
+rmmod i2c_mv64xxx\
+modprobe i2c_mv64xxx\
+modprobe i2c-dev\
+modprobe i2c_mux_gpio\
 inband_mgmt(){\
- sleep 60
+ sleep 60\
  while :; do\
    ip -br link show eth0 2> /dev/null\
    if [ $? -eq 0 ]; then\
