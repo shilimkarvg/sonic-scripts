@@ -23,7 +23,7 @@ diff --git a/files/initramfs-tools/modules.arm b/files/initramfs-tools/modules.a
 index a923920..3170621 100644
 --- a/files/initramfs-tools/modules.arm
 +++ b/files/initramfs-tools/modules.arm
-@@ -2,6 +2,15 @@ crc16
+@@ -2,6 +2,16 @@ crc16
  deflate
  zlib_deflate
  m25p80
@@ -39,6 +39,7 @@ index a923920..3170621 100644
 +mtdswap
 +mtdoops
 +mtd_blkdevs
++adt7475
 diff --git a/platform/marvell-armhf/platform.conf b/platform/marvell-armhf/platform.conf
 index 7799b33..e5b3c5d 100644
 --- a/platform/marvell-armhf/platform.conf
