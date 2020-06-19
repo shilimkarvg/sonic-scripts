@@ -166,6 +166,13 @@ misc_workarounds()
     sed -i 's/ENABLE_SYSTEM_TELEMETRY = y/ENABLE_SYSTEM_TELEMETRY = N/g' rules/config
 
     #2 TODO: Add Entropy workaround for ARM64
+    wget -c https://raw.githubusercontent.com/Marvell-switching/sonic-scripts/master/files/ent.py
+    mv ent.py files/image_config/platform/ent.py
+    sed -i '/platform rc.local/i \
+        sudo cp $IMAGE_CONFIGS/platform/ent.py $FILESYSTEM_ROOT/etc/' files/build_templates/sonic_debian_extension.j2
+    sed -i '/build_version/i \
+        python /etc/ent.py &' files/image_config/platform/rc.local
+
 
     #3 Add ipv4/ipv6 arp gc_thresh
     create_temp_rclocal_patch
@@ -182,16 +189,98 @@ misc_workarounds()
     sed -i 's/"cir":"600",/"cir":"6000",/g' src/sonic-swss/swssconfig/sample/00-copp.config.json
     sed -i 's/"cbs":"600",/"cbs":"6000",/g' src/sonic-swss/swssconfig/sample/00-copp.config.json
 
+    # Download hwsku
+    wget -c https://raw.githubusercontent.com/Marvell-switching/sonic-scripts/master/files/mrvl_sonic_falcon_hwsku.tgz
+    rm -fr device/marvell/x86_64-marvell_db98cx8580_32cd-r0 || true
+    rm -fr device/marvell/arm64-marvell_db98cx8580_32cd-r0  || true
+    rm -fr device/marvell/x86_64-marvell_db98cx8540_16cd-r0 || true
+    rm -fr device/marvell/arm64-marvell_db98cx8540_16cd-r0  || true
+    tar -C device/marvell/ -xzf mrvl_sonic_falcon_hwsku.tgz
+    cp -dr device/marvell/arm64-marvell_db98cx8580_32cd-r0 device/marvell/x86_64-marvell_db98cx8580_32cd-r0
+    cp -dr device/marvell/arm64-marvell_db98cx8540_16cd-r0 device/marvell/x86_64-marvell_db98cx8540_16cd-r0
+
     #6 Overwrite default profile with 32x25G 12.8T
     cp -rv device/marvell/x86_64-marvell_db98cx8580_32cd-r0/FALCON32X25G/* device/marvell/x86_64-marvell_db98cx8580_32cd-r0/db98cx8580_32cd/
     cp -rv device/marvell/arm64-marvell_db98cx8580_32cd-r0/FALCON32X25G/* device/marvell/arm64-marvell_db98cx8580_32cd-r0/db98cx8580_32cd/
 
     #7 Overwrite default profile with 16x25G 6.4T
-    cp -rv device/marvell/x86_64-marvell_db98cx8580_16cd-r0/FALCON16X25G/* device/marvell/x86_64-marvell_db98cx8580_16cd-r0/db98cx8580_16cd/
-    cp -rv device/marvell/arm64-marvell_db98cx8580_16cd-r0/FALCON16X25G/* device/marvell/arm64-marvell_db98cx8580_16cd-r0/db98cx8580_16cd/
+    cp -rv device/marvell/x86_64-marvell_db98cx8540_16cd-r0/FALCON16X25G/* device/marvell/x86_64-marvell_db98cx8540_16cd-r0/db98cx8540_16cd/ || true
+    cp -rv device/marvell/arm64-marvell_db98cx8540_16cd-r0/FALCON16X25G/* device/marvell/arm64-marvell_db98cx8540_16cd-r0/db98cx8540_16cd/ || true
 
     #7 ARM64 jessie target
     sed -i 's/apt-get update/apt-get -o Acquire::Check-Valid-Until=false update/'g sonic-slave-jessie/Dockerfile.j2
+    sed -i 's/apt-get install -y/apt-get install --force-yes -y/'g sonic-slave-jessie/Dockerfile.j2
+    sed -i 's/apt-get -y/apt-get --force-yes -y/'g sonic-slave-jessie/Dockerfile.j2
+}
+
+
+build_fixes()
+{
+    sed -i '/RUN apt-get install -y rsyslog/i \
+            RUN apt-get install -y cmake \
+            RUN apt-mark manual cmake' sonic-slave-stretch/Dockerfile.j2
+
+    sed -i '/EXPOSE 22/i \
+            RUN apt-get install -y gem2deb \
+            RUN apt-mark manual gem2deb \
+            RUN apt-get install -y dh-systemd \
+            RUN apt-mark manual dh-systemd \
+            RUN apt-get install -y equivs \
+            RUN apt-mark manual equivs \
+            RUN apt-get install -y javahelper \
+            RUN apt-mark manual javahelper \
+            RUN apt-get install -y pkg-php-tools \
+            RUN apt-mark manual pkg-php-tools \
+            RUN apt-get install -y python-stdeb \
+            RUN apt-mark manual python-stdeb \
+            RUN apt-get install -y libssl1.0-dev \
+            RUN apt-mark manual libssl1.0-dev \
+            RUN apt-get install -y python-click \
+            RUN apt-mark manual python-click \
+            RUN apt-get install -y dh-strip-nondeterminism \
+            RUN apt-mark manual dh-strip-nondeterminism \
+            RUN apt-get install -y debhelper \
+            RUN apt-mark manual debhelper \
+            RUN apt-get install -y dh-systemd \
+            RUN apt-mark manual dh-systemd \
+            RUN apt-get install -y kernel-wedge \
+            RUN apt-mark manual kernel-wedge \
+            RUN apt-get install -y dh-autoreconf \
+            RUN apt-mark manual dh-autoreconf \
+            RUN apt-get install -y dh-exec \
+            RUN apt-mark manual dh-exec \
+            RUN apt-get install -y libssl-dev \
+            RUN apt-mark manual libssl-dev \
+            RUN apt-get install -y dh-make \
+            RUN apt-mark manual dh-make' sonic-slave-stretch/Dockerfile.j2
+
+    sed -i 's/dpkg-buildpackage /dpkg-buildpackage -d /' src/isc-dhcp/Makefile
+
+    #sed -i 's/SONIC_/#SONIC_/g' rules/smartmontools.mk
+    sed -i 's/dpkg-buildpackage -us/dpkg-buildpackage -d -us/' src/smartmontools/Makefile
+    #sed -i 's/dh_installsystemd//' src/smartmontools/smartmontools-6.6/debian/rules
+    sed -i '/dpkg-buildpackage/i \
+	sed -i "/dh_installsystemd/d" debian/rules' src/smartmontools/Makefile
+
+    sed -i '/fakeroot/i \
+ifeq ($(CONFIGURED_ARCH), amd64) \
+	echo 11 > debian\/compat \
+endif' src/hiredis/Makefile
+
+
+    sed -i 's/dpkg-buildpackage /dpkg-buildpackage -d /' src/redis/Makefile
+    sed -i '/export/i \
+ifeq ($(CONFIGURED_ARCH), amd64) \
+	echo 11 > debian\/compat \
+endif' src/redis/Makefile
+
+    sed -i 's/dpkg-buildpackage /dpkg-buildpackage -d /' src/libteam/Makefile
+    sed -i '/dpkg-buildpackage/i \
+ifeq ($(CONFIGURED_ARCH), amd64) \
+	echo 11 > debian\/compat \
+endif' src/libteam/Makefile
+    sed -i '/dpkg-buildpackage/i \
+	./autogen.sh' src/libteam/Makefile
 }
 
 main()
@@ -213,6 +302,8 @@ main()
     date > ${FULL_PATH}/${LOG_FILE}
 
     apply_patches 
+
+    build_fixes
 
     misc_workarounds
 }
