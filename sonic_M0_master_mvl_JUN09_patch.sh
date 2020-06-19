@@ -13,19 +13,19 @@ set -e
 # CONFIGURATIONS:-
 #
 
-SONIC_MASTER_MAY16_COMMIT="ddd6368e641c3bf638aecba61d68c22e8b9fb7cd"
+SONIC_MASTER_JUN09_COMMIT="f31eabb5ee65f7d37d57d0da85dacf39d3b5fad1"
 
 declare -a PATCHES=(P1 P2 P3 P4 P5 P6)
 
 url="https://github.com/Azure"
 urlsai="https://patch-diff.githubusercontent.com/raw/opencomputeproject"
 
-declare -A P1=( [NAME]=sonic-buildimage [DIR]=. [PR]="3392 3687 4510 4575 4535 4522 4650 4703" [URL]="$url" [PREREQ]="" [POSTREQ]="")
+declare -A P1=( [NAME]=sonic-buildimage [DIR]=. [PR]="3687" [URL]="$url" [PREREQ]="" [POSTREQ]="")
 declare -A P2=( [NAME]=sonic-swss [DIR]=src/sonic-swss [PR]="1280 1325" [URL]="$url" [PREREQ]="" )
 declare -A P3=( [NAME]=sonic-swss-common [DIR]=src/sonic-swss-common [PR]="352" [URL]="$url" [PREREQ]="" )
 declare -A P4=( [NAME]=sonic-mgmt-framework [DIR]=src/sonic-mgmt-framework [PR]="46" [URL]="$url" [PREREQ]="" )
 declare -A P5=( [NAME]=sonic-linux-kernel [DIR]=src/sonic-linux-kernel [PR]="" [URL]="$url" [PREREQ]="apply_buster_kernel" )
-declare -A P6=( [NAME]=sonic-platform-common [DIR]=src/sonic-platform-common [PR]=74 [URL]="$url" [PREREQ]="" )
+declare -A P6=( [NAME]=sonic-platform-common [DIR]=src/sonic-platform-common [PR]="" [URL]="$url" [PREREQ]="" )
 
 #
 # END of CONFIGURATIONS
@@ -50,7 +50,7 @@ pre_patch_help()
     log "STEPS TO BUILD:"
     log "git clone https://github.com/Azure/sonic-buildimage.git"
     log "cd sonic-buildimage"
-    log "git checkout $SONIC_MASTER_MAY16_COMMIT"
+    log "git checkout $SONIC_MASTER_JUN09_COMMIT"
     log "git checkout -b mrvl"
     log "make init"
 
@@ -139,8 +139,6 @@ python /etc/ent.py &' files/image_config/platform/rc.local
 inband_mgmt_fix()
 {
     # WA to restart networking for inband mgmt
-    sed -i '$ a inbandMgmtPortNum=48' device/marvell/armhf-marvell_et6448m_52x-r0/et6448m/profile.ini
-
     sed -i '/build_version/i \
 /bin/sh /etc/inband_mgmt' files/image_config/platform/rc.local
 
@@ -163,16 +161,11 @@ inband_mgmt(){\
    if [ $? -eq 0 ]; then\
        ip -br address show eth0 | grep -qw "UP" 2>/dev/null\
        if [ $? -ne 0 ]; then\
-         ip -br link show eth0 | grep -q "eth0@Eth" 2> /dev/null\
-         if [ $? -eq 0 ]; then\
            systemctl restart networking\
-           intf=$(ip link show eth0 | grep eth0 | cut -d@ -f2| cut -d: -f1)\
-           config interface startup $intf\
-         fi\
        fi\
        sleep 120\
    else\
-     sleep 10\
+     sleep 3\
    fi\
  done\
 }\
@@ -182,8 +175,8 @@ inband_mgmt(){\
 
 apply_buster_kernel()
 {
-    git checkout master
-    git checkout e2dbd4ced8c32d43844ae1e2066624113a5e0e1d
+    #git checkout master
+    #git checkout e2dbd4ced8c32d43844ae1e2066624113a5e0e1d
     wget -c https://raw.githubusercontent.com/Marvell-switching/sonic-scripts/master/files/armhf_kernel_4.19.67.patch
 
     patch -p1 --dry-run < ./armhf_kernel_4.19.67.patch
@@ -193,8 +186,8 @@ apply_buster_kernel()
 
 build_kernel_buster()
 {
-    wget -c https://raw.githubusercontent.com/Marvell-switching/sonic-scripts/master/files/armhf_build_kernel_4.19.67.patch
-    patch -p1 --dry-run < ./armhf_build_kernel_4.19.67.patch
+    wget -c https://raw.githubusercontent.com/Marvell-switching/sonic-scripts/master/files/armhf_build_kernel_4.19.67_jun09.patch
+    patch -p1 --dry-run < ./armhf_build_kernel_4.19.67_jun09.patch
     echo "Patching 4.19.67 build rules"
     patch -p1 < ./armhf_build_kernel_4.19.67.patch
 }
@@ -236,7 +229,7 @@ main()
         exit
     fi
 
-    if [ "${sonic_buildimage_commit}" != "$SONIC_MASTER_MAY16_COMMIT" ]; then
+    if [ "${sonic_buildimage_commit}" != "$SONIC_MASTER_JUN09_COMMIT" ]; then
         log "Checkout sonic-buildimage commit as below to proceed"
         log "git checkout ${SONIC_201911_MAY06_COMMIT}"
         pre_patch_help
@@ -251,9 +244,9 @@ main()
 
     inband_mgmt_fix
 
-    master_armhf_fix
-
     build_kernel_buster
+
+    master_armhf_fix
 }
 
 main $@

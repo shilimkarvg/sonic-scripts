@@ -1,0 +1,48 @@
+diff --git a/files/initramfs-tools/modules.arm b/files/initramfs-tools/modules.arm
+index a923920..3170621 100644
+--- a/files/initramfs-tools/modules.arm
++++ b/files/initramfs-tools/modules.arm
+@@ -2,6 +2,16 @@ crc16
+ deflate
+ zlib_deflate
+ m25p80
++marvell_nand
+ ubi
+ ubifs
+ squashfs
++i2c_mv64xxx
++ar7part
++ofpart
++mtdblock
++mtdblock_ro
++mtdswap
++mtdoops
++mtd_blkdevs
++adt7475
+diff --git a/platform/marvell-armhf/platform.conf b/platform/marvell-armhf/platform.conf
+index 7799b33..e5b3c5d 100644
+--- a/platform/marvell-armhf/platform.conf
++++ b/platform/marvell-armhf/platform.conf
+@@ -10,8 +10,8 @@ fdt_addr=0x1000000
+ initrd_addr=0x2000000
+ VAR_LOG=512
+ 
+-kernel_fname="/boot/vmlinuz-4.9.0-11-2-armmp"
+-initrd_fname="/boot/initrd.img-4.9.0-11-2-armmp"
++kernel_fname="/boot/vmlinuz-4.19.0-6-armmp"
++initrd_fname="/boot/initrd.img-4.19.0-6-armmp"
+ fdt_fname="/boot/armada-385-ET6448M_4G_Nand.dtb"
+ 
+ # global mount defines
+@@ -23,9 +23,9 @@ FW_ENV_DEFAULT='/dev/mtd0 0x00500000 0x80000 0x100000 8'
+ UBOOT_FW_DEFAULT=1
+ 
+ # Skip VID Header in UBIFS
+-BOOTARGS='setenv bootargs root='$demo_dev' rw rootwait ubi.mtd='$mtd_num',8192 rootfstype=ubifs panic=1 console=ttyS0,115200 ${othbootargs} ${mtdparts} ${linuxargs}'
++BOOTARGS='setenv bootargs root='$demo_dev' rw rootwait ubi.mtd='$mtd_num' rootfstype=ubifs panic=1 console=ttyS0,115200 ${othbootargs} ${mtdparts} ${linuxargs}'
+ UBI_LOAD='run ubi_sonic_boot_mount_ubi; ubifsload $kernel_addr $image_name;ubifsload $fdt_addr $fdt_name; ubifsload $initrd_addr $initrd_name'
+-BOOTARGS_OLD='setenv bootargs root='$demo_dev' rw rootwait ubi.mtd='$mtd_num',8192 rootfstype=ubifs panic=1 console=ttyS0,115200 ${othbootargs} ${mtdparts} ${linuxargs_old}'
++BOOTARGS_OLD='setenv bootargs root='$demo_dev' rw rootwait ubi.mtd='$mtd_num' rootfstype=ubifs panic=1 console=ttyS0,115200 ${othbootargs} ${mtdparts} ${linuxargs_old}'
+ UBI_LOAD_OLD='run ubi_sonic_boot_mount_ubi; ubifsload $kernel_addr $image_name_old;ubifsload $fdt_addr $fdt_name_old; ubifsload $initrd_addr $initrd_name_old'
+ UBIBOOTCMD='run ubi_sonic_boot_bootargs; run ubi_sonic_boot_load; test -n "$boot_once" && setenv boot_once "" && saveenv; bootz $kernel_addr $initrd_addr $fdt_addr'
+ UBIBOOTCMD_OLD='run ubi_sonic_boot_bootargs_old; run ubi_sonic_boot_load_old; test -n "$boot_once" && setenv boot_once "" && saveenv; bootz $kernel_addr $initrd_addr $fdt_addr'
