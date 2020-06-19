@@ -138,8 +138,6 @@ python /etc/ent.py &' files/image_config/platform/rc.local
 inband_mgmt_fix()
 {
     # WA to restart networking for inband mgmt
-    sed -i '$ a inbandMgmtPortNum=48' device/marvell/armhf-marvell_et6448m_52x-r0/et6448m/profile.ini
-
     sed -i '/build_version/i \
 /bin/sh /etc/inband_mgmt' files/image_config/platform/rc.local
 
@@ -162,16 +160,11 @@ inband_mgmt(){\
    if [ $? -eq 0 ]; then\
        ip -br address show eth0 | grep -qw "UP" 2>/dev/null\
        if [ $? -ne 0 ]; then\
-         ip -br link show eth0 | grep -q "eth0@Eth" 2> /dev/null\
-         if [ $? -eq 0 ]; then\
            systemctl restart networking\
-           intf=$(ip link show eth0 | grep eth0 | cut -d@ -f2| cut -d: -f1)\
-           config interface startup $intf\
-         fi\
        fi\
        sleep 120\
    else\
-     sleep 10\
+     sleep 3\
    fi\
  done\
 }\
