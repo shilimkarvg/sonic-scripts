@@ -1,5 +1,7 @@
---- ../sonic-buildimage_201911_Dec14/src/sonic-utilities/sonic_installer/main.py	2020-06-10 12:53:10.652968110 +0530
-+++ src/sonic-utilities/sonic_installer/main.py	2020-06-19 15:24:32.624697186 +0530
+diff --git a/sonic_installer/main.py b/sonic_installer/main.py
+index 8696c65..ccfd869 100644
+--- a/sonic_installer/main.py
++++ b/sonic_installer/main.py
 @@ -414,6 +414,9 @@
              click.echo("Skipping configuration migration as requested in the command option.")
          else:
