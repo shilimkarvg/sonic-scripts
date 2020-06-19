@@ -22,7 +22,7 @@ urlsai="https://patch-diff.githubusercontent.com/raw/opencomputeproject"
 
 declare -A P1=( [NAME]=sonic-buildimage [DIR]=. [PR]="3687 3734 3955 3963 3941 4016 4043 4066 4081 4168 4205 4280 4293" [URL]="$url" [PREREQ]="" [POSTREQ]="frr_cfg")
 declare -A P2=( [NAME]=sonic-swss [DIR]=src/sonic-swss [PR]="1162 1163 1167 1168 1190" [URL]="$url" [PREREQ]="" )
-declare -A P3=( [NAME]=sonic-utilities [DIR]=src/sonic-utilities [PR]="811" [URL]="$url" [PREREQ]="util_cfg" )
+declare -A P3=( [NAME]=sonic-utilities [DIR]=src/sonic-utilities [PR]="811" [URL]="$url" [PREREQ]="util_cfg" [POSTREQ]="installer_patch")
 declare -A P4=( [NAME]=sonic-linux-kernel [DIR]=src/sonic-linux-kernel [PR]="125" [URL]="$url" [PREREQ]="prereq_kernel" )
 
 #
@@ -82,6 +82,14 @@ frr_cfg()
     patch -p1 < 4066.diff
     rm 4066.diff
 }
+
+installer_patch()
+{
+    wget -c https://raw.githubusercontent.com/Marvell-switching/sonic-scripts/master/files/mrvl_falcon_dec14_sonic_util.patch
+    patch -p1 < mrvl_falcon_dec14_sonic_util.patch
+    rm mrvl_falcon_dec14_sonic_util.patch
+}
+
 
 apply_patches()
 {
@@ -211,6 +219,7 @@ misc_workarounds()
     sed -i 's/apt-get update/apt-get -o Acquire::Check-Valid-Until=false update/'g sonic-slave-jessie/Dockerfile.j2
     sed -i 's/apt-get install -y/apt-get install --force-yes -y/'g sonic-slave-jessie/Dockerfile.j2
     sed -i 's/apt-get -y/apt-get --force-yes -y/'g sonic-slave-jessie/Dockerfile.j2
+
 }
 
 

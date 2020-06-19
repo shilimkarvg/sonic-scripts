@@ -1,0 +1,12 @@
+--- ../sonic-buildimage_201911_Dec14/src/sonic-utilities/sonic_installer/main.py	2020-06-10 12:53:10.652968110 +0530
++++ src/sonic-utilities/sonic_installer/main.py	2020-06-19 15:24:32.624697186 +0530
+@@ -414,6 +414,9 @@
+             click.echo("Skipping configuration migration as requested in the command option.")
+         else:
+             run_command('config-setup backup')
++        run_command("rm -rf /host/old_config")
++        # copy directories and preserve original file structure, attributes and associated metadata
++        run_command("cp -ar /etc/sonic /host/old_config")
+ 
+     # Finally, sync filesystem
+     run_command("sync;sync;sync")
