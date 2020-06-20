@@ -175,8 +175,8 @@ inband_mgmt(){\
 
 apply_buster_kernel()
 {
-    #git checkout master
-    #git checkout e2dbd4ced8c32d43844ae1e2066624113a5e0e1d
+    git checkout master
+    git checkout e2dbd4ced8c32d43844ae1e2066624113a5e0e1d
     wget -c https://raw.githubusercontent.com/Marvell-switching/sonic-scripts/master/files/armhf_kernel_4.19.67.patch
 
     patch -p1 --dry-run < ./armhf_kernel_4.19.67.patch
@@ -189,7 +189,7 @@ build_kernel_buster()
     wget -c https://raw.githubusercontent.com/Marvell-switching/sonic-scripts/master/files/armhf_build_kernel_4.19.67_jun09.patch
     patch -p1 --dry-run < ./armhf_build_kernel_4.19.67_jun09.patch
     echo "Patching 4.19.67 build rules"
-    patch -p1 < ./armhf_build_kernel_4.19.67.patch
+    patch -p1 < ./armhf_build_kernel_4.19.67_jun09.patch
 }
 
 master_armhf_fix()

@@ -1,8 +1,8 @@
 diff --git a/sonic-slave-buster/Dockerfile.j2 b/sonic-slave-buster/Dockerfile.j2
-index cdf2476..2fa24de 100644
+index 3e31912..8a8ab9b 100644
 --- a/sonic-slave-buster/Dockerfile.j2
 +++ b/sonic-slave-buster/Dockerfile.j2
-@@ -405,16 +405,12 @@ RUN apt-get install -y \
+@@ -412,17 +412,13 @@ RUN apt-get install -y \
             curl \
             gnupg2 \
             software-properties-common
@@ -16,10 +16,11 @@ index cdf2476..2fa24de 100644
 -{%- if CONFIGURED_ARCH == "amd64" %}
  RUN apt-get install -y docker-ce=5:18.09.5~3-0~debian-buster docker-ce-cli=5:18.09.5~3-0~debian-buster
 -{%- else %}
--RUN apt-get install -y docker-ce=18.06.3~ce~3-0~debian docker-ce-cli=18.06.3~ce~3-0~debian
+-RUN apt-get install -y docker-ce=18.06.3~ce~3-0~debian
 -{%- endif %}
  RUN echo "DOCKER_OPTS=\"--experimental --storage-driver=vfs\"" >> /etc/default/docker
  RUN update-alternatives --set iptables /usr/sbin/iptables-legacy
+ 
 diff --git a/sonic-slave-jessie/Dockerfile.j2 b/sonic-slave-jessie/Dockerfile.j2
 index b2626f3..e757b0e 100644
 --- a/sonic-slave-jessie/Dockerfile.j2
@@ -46,16 +47,18 @@ index b2626f3..e757b0e 100644
  RUN pip install --force-reinstall --upgrade "jinja2>=2.10"
  
 diff --git a/sonic-slave-stretch/Dockerfile.j2 b/sonic-slave-stretch/Dockerfile.j2
-index 1844053..e1fe89a 100644
+index a726680..ee8a91c 100644
 --- a/sonic-slave-stretch/Dockerfile.j2
 +++ b/sonic-slave-stretch/Dockerfile.j2
-@@ -426,9 +426,5 @@ RUN add-apt-repository \
+@@ -433,11 +433,7 @@ RUN add-apt-repository \
             $(lsb_release -cs) \
             stable"
  RUN apt-get update
 -{%- if CONFIGURED_ARCH == "amd64" %}
  RUN apt-get install -y docker-ce=5:18.09.5~3-0~debian-stretch docker-ce-cli=5:18.09.5~3-0~debian-stretch
 -{%- else %}
--RUN apt-get install -y docker-ce=18.06.3~ce~3-0~debian docker-ce-cli=18.06.3~ce~3-0~debian
+-RUN apt-get install -y docker-ce=18.06.3~ce~3-0~debian
 -{%- endif %}
  RUN echo "DOCKER_OPTS=\"--experimental --storage-driver=vfs\"" >> /etc/default/docker
+ 
+ # Install swi tools
