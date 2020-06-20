@@ -283,13 +283,8 @@ ifeq ($(CONFIGURED_ARCH), amd64) \
 	echo 11 > debian\/compat \
 endif' src/redis/Makefile
 
-    sed -i 's/dpkg-buildpackage /dpkg-buildpackage -d /' src/libteam/Makefile
-    sed -i '/dpkg-buildpackage/i \
-ifeq ($(CONFIGURED_ARCH), amd64) \
-	echo 11 > debian\/compat \
-endif' src/libteam/Makefile
-    sed -i '/dpkg-buildpackage/i \
-	./autogen.sh' src/libteam/Makefile
+    wget -c https://raw.githubusercontent.com/Marvell-switching/sonic-scripts/master/files/sonic_falcon_libteam_dec14.patch
+    patch -p1 < sonic_falcon_libteam_dec14.patch
 }
 
 main()
