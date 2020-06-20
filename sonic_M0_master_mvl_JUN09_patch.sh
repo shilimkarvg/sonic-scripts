@@ -214,10 +214,10 @@ master_armhf_fix()
     patch -p1 < ./libyang_wa.patch
 
     # sonic_yang patch
-    wget -c https://raw.githubusercontent.com/Marvell-switching/sonic-scripts/master/files/sonic_yang_wa.patch 
-    patch -p1 --dry-run < ./sonic_yang_wa.patch 
+    wget -c https://raw.githubusercontent.com/Marvell-switching/sonic-scripts/master/files/sonic_yang_wa_jun09.patch
+    patch -p1 --dry-run < ./sonic_yang_wa_jun09.patch
     echo "sonic-yang fix test"
-    patch -p1 < ./sonic_yang_wa.patch 
+    patch -p1 < ./sonic_yang_wa_jun09.patch
 }
 
 main()
