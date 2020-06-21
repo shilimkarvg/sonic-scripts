@@ -222,6 +222,9 @@ master_armhf_fix()
     # wheel
     sed -i '/keep pip installed/i \
 sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT pip install wheel' build_debian.sh
+
+    # Update SAI 1.6.1
+    sed -i 's/1.5.1/1.6.1/g' platform/marvell-armhf/sai.mk
 }
 
 main()
