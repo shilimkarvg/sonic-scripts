@@ -1,17 +1,13 @@
 diff --git a/src/sonic-yang-mgmt/setup.py b/src/sonic-yang-mgmt/setup.py
-index ab8fafa..d23bf73 100644
+index 63ea064..88435a2 100644
 --- a/src/sonic-yang-mgmt/setup.py
 +++ b/src/sonic-yang-mgmt/setup.py
-@@ -55,10 +55,10 @@ class pkgBuild(build_py):
-                     print("{} installed".format(req))
- 
+@@ -25,8 +25,8 @@ class pkgBuild(build_py):
          # run pytest for libyang python APIs
--        self.pytest_args = []
--        errno = pytest.main(self.pytest_args)
+         self.pytest_args = []
+         errno = pytest.main(self.pytest_args)
 -        if (errno):
 -            exit(errno)
-+        #self.pytest_args = []
-+        #errno = pytest.main(self.pytest_args)
 +        #if (errno):
 +        #    exit(errno)
  
