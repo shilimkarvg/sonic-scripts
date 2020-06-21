@@ -220,6 +220,11 @@ misc_workarounds()
     sed -i 's/apt-get install -y/apt-get install --force-yes -y/'g sonic-slave-jessie/Dockerfile.j2
     sed -i 's/apt-get -y/apt-get --force-yes -y/'g sonic-slave-jessie/Dockerfile.j2
 
+
+    #9 TODO: Intel USB access
+    wget -c https://raw.githubusercontent.com/Marvell-switching/sonic-scripts/master/files/sonic_usb_install_slow.patch
+    patch -p1 < sonic_usb_install_slow.patch
+
 }
 
 

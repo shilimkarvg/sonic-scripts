@@ -251,7 +251,8 @@ misc_workarounds()
     sed -i 's/4.9.0-9-2/4.9.0-11-2/g' platform/marvell-arm64/platform.conf
 
     #9 TODO: Intel USB access
-    patch -p1 < ${SCRIPT_DIR}/sonic_usb_install_slow.patch
+    wget -c https://raw.githubusercontent.com/Marvell-switching/sonic-scripts/master/files/sonic_usb_install_slow.patch
+    patch -p1 < sonic_usb_install_slow.patch
 
     # LAST -- remove dirty from Image version
     # git add -u && git commit -m "Committing Marvell Workarounds" || echo "Code is clean, no commit required"
