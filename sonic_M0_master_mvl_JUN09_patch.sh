@@ -218,6 +218,10 @@ master_armhf_fix()
     patch -p1 --dry-run < ./sonic_yang_wa_jun09.patch
     echo "sonic-yang fix test"
     patch -p1 < ./sonic_yang_wa_jun09.patch
+
+    # wheel
+    sed -i '/keep pip installed/i \
+sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT pip install wheel' build_debian.sh
 }
 
 main()
