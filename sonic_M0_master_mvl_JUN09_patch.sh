@@ -225,6 +225,9 @@ sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT pip install wheel' 
 
     # Update SAI 1.6.1
     sed -i 's/1.5.1/1.6.1/g' platform/marvell-armhf/sai.mk
+
+    # Mac address fix
+    sed -i  "s/'cat'/'cat '/g" src/sonic-config-engine/sonic_device_util.py
 }
 
 main()
