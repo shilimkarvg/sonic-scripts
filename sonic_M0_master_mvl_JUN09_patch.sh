@@ -228,6 +228,10 @@ sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT pip install wheel' 
 
     # Mac address fix
     sed -i  "s/'cat'/'cat '/g" src/sonic-config-engine/sonic_device_util.py
+
+    # Fancontrol
+    sed -i '/fancontrol.pid/i \
+/bin/cp -f /usr/share/sonic/platform/fancontrol /etc/' dockers/docker-platform-monitor/docker_init.sh
 }
 
 main()
