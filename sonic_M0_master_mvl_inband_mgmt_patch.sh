@@ -158,7 +158,7 @@ inband_mgmt(){\
  while :; do\
    ip -br link show eth0 2> /dev/null\
    if [ $? -eq 0 ]; then\
-       ip -br address show eth0 | grep -qw "UP" 2>/dev/null\
+       ip address show eth0 | grep -qw "inet" 2>/dev/null\
        if [ $? -ne 0 ]; then\
            systemctl restart networking\
        fi\
