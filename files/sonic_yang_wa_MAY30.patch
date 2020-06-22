@@ -3,7 +3,7 @@ index 63ea064..d4ff0e1 100644
 --- a/src/sonic-yang-mgmt/setup.py
 +++ b/src/sonic-yang-mgmt/setup.py
 @@ -23,10 +23,10 @@ class pkgBuild(build_py):
-
+ 
      def run (self):
          # run pytest for libyang python APIs
 -        self.pytest_args = []
@@ -14,16 +14,9 @@ index 63ea064..d4ff0e1 100644
 +        #errno = pytest.main(self.pytest_args)
 +        #if (errno):
 +        #    exit(errno)
-
+ 
          # Continue usual build steps
          build_py.run(self)
-marvell@cpss-build9:~/MO_JUNE9/sonic-buildimage$
-marvell@cpss-build9:~/MO_JUNE9/sonic-buildimage$
-marvell@cpss-build9:~/MO_JUNE9/sonic-buildimage$
-marvell@cpss-build9:~/MO_JUNE9/sonic-buildimage$
-marvell@cpss-build9:~/MO_JUNE9/sonic-buildimage$
-marvell@cpss-build9:~/MO_JUNE9/sonic-buildimage$
-marvell@cpss-build9:~/MO_JUNE9/sonic-buildimage$ git diff  src/sonic-yang-models/setup.py
 diff --git a/src/sonic-yang-models/setup.py b/src/sonic-yang-models/setup.py
 index 6add4c2..6420591 100644
 --- a/src/sonic-yang-models/setup.py
@@ -36,5 +29,4 @@ index 6add4c2..6420591 100644
 +        #    exit(1)
          else:
              print("YANG Tests passed\n")
-
-
+ 
