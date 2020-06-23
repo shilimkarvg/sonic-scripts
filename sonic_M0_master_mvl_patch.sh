@@ -232,6 +232,9 @@ sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT pip install wheel' 
     # Fancontrol
     sed -i '/fancontrol.pid/i \
 /bin/cp -f /usr/share/sonic/platform/fancontrol /etc/' dockers/docker-platform-monitor/docker_init.sh
+
+    # snmp subagent
+    echo 'sudo sed -i "s/python3.6/python3/g" $FILESYSTEM_ROOT/etc/monit/conf.d/monit_snmp' >> files/build_templates/sonic_debian_extension.j2
 }
 
 main()
