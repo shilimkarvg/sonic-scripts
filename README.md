@@ -24,10 +24,11 @@ sonic_M0_mvl_patch.sh                       - 201911 Dec14 Commit
     * x86_64-marvell_db98cx8580_32cd-r0
     * arm64-marvell_db98cx8580_16cd-r0 
     * arm64-marvell_db98cx8580_32cd-r0
-ARCH        | CPU
-------------|--------
-ARM64       | X86_64
-Armada7020  | Xeon
+
+    ARCH        | CPU
+    ------------|--------
+    ARM64       | X86_64
+    Armada7020  | Xeon
 
 * Port: 12.8T, 6.4T
 
