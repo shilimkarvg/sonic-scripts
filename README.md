@@ -27,8 +27,8 @@ sonic_M0_mvl_patch.sh                       - 201911 Dec14 Commit
 
     ARCH        | CPU
     ------------|--------
-    ARM64       | X86_64
-    Armada7020  | Xeon
+    ARM64       | Armada7020
+    X86_64      | Xeon
 
 * Port: 12.8T, 6.4T
 
