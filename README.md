@@ -9,9 +9,13 @@ Marvell patch script to do git patch/apply all open PRs required to build SONIC 
 ### M0/DNI-ET6448M Platform
 * SONIC Device: 
     * armhf-marvell_et6448m_52x-r0
-* ARCH: ARMHF
-* CPU: Armada385
+
+    ARCH        | CPU
+    ------------|-----------
+    ARMHF       | Armada385
+
 * Port: 48x1G+4x10G
+
 ```sh
 sonic_M0_master_mvl_patch.sh                - Master Jun09 Commit
 sonic_M0_master_mvl_inband_mgmt_patch.sh    - Master Apr17 Commint
