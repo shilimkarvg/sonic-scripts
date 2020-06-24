@@ -187,6 +187,7 @@ misc_workarounds()
     sed '16r /tmp/rclocal_fix' < files/image_config/platform/rc.local > files/image_config/platform/rc.local_new
     mv files/image_config/platform/rc.local files/image_config/platform/rc.local_orig
     mv files/image_config/platform/rc.local_new files/image_config/platform/rc.local
+    chmod a+rwx files/image_config/platform/rc.local
 
     #4 Watchdog/select Timeout  workaround
     sed -i 's/(60\*1000)/(500\*1000)/g' src/sonic-sairedis/lib/inc/sai_redis.h
