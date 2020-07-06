@@ -239,6 +239,13 @@ sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT pip install wheel' 
 
     # snmp subagent
     echo 'sudo sed -i "s/python3.6/python3/g" $FILESYSTEM_ROOT/etc/monit/conf.d/monit_snmp' >> files/build_templates/sonic_debian_extension.j2
+
+    # sonic_generate_dump patch
+    pushd src/sonic-utilities
+    wget -c https://raw.githubusercontent.com/Marvell-switching/sonic-scripts/master/files/sonic_generate_dump.patch
+    patch -p1 --dry-run < ./sonic_generate_dump.patch
+    patch -p1 < ./sonic_generate_dump.patch
+    popd
 }
 
 main()
