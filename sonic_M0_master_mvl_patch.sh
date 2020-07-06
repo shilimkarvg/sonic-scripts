@@ -171,6 +171,10 @@ inband_mgmt(){\
 }\
 (inband_mgmt > /dev/null)&' files/image_config/platform/inband_mgmt
 
+   # Download hwsku
+   wget -c https://raw.githubusercontent.com/Marvell-switching/sonic-scripts/master/files/mrvl_sonic_m0_hwsku.tgz
+   tar -C device/marvell/armhf-marvell_et6448m_52x-r0/ -xzf mrvl_sonic_m0_hwsku.tgz
+
 }
 
 apply_buster_kernel()
