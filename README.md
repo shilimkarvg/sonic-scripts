@@ -17,9 +17,7 @@ Marvell patch script to do git patch/apply all open PRs required to build SONIC 
 * Port: 48x1G+4x10G
 
 ```sh
-sonic_M0_master_mvl_patch.sh                - Master Jun09 Commit
-sonic_M0_master_mvl_inband_mgmt_patch.sh    - Master Apr17 Commint
-sonic_M0_mvl_patch.sh                       - 201911 Dec14 Commit
+sonic_M0_master_mvl_patch.sh                - 202006 Jun30 Commit
 ```
 
 ### Falcon Platform
@@ -37,6 +35,13 @@ sonic_M0_mvl_patch.sh                       - 201911 Dec14 Commit
 * Port: 12.8T, 6.4T
 
 ```sh
-sonic_falcon_mvl_patch.sh                   - 201911 Dec14 Commit 
 sonic_falcon_201911_mvl_patch.sh            - 201911 May06 Commit
 ```
+
+### Archived scripts:
+```sh
+ARCHIVE/sonic_M0_master_mvl_inband_mgmt_patch.sh    - Master Apr17 Commint
+ARCHIVE/sonic_M0_mvl_patch.sh                       - 201911 Dec14 Commit
+ARCHIVE/sonic_falcon_mvl_patch.sh                   - 201911 Dec14 Commit 
+```
+

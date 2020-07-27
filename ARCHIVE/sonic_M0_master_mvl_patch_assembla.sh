@@ -13,7 +13,8 @@ set -e
 # CONFIGURATIONS:-
 #
 
-SONIC_MASTER_JUN30_COMMIT="ed7fafce7741f4641d128f8c053eabfeaac7de80"
+#SONIC_MASTER_JUN30_COMMIT="ed7fafce7741f4641d128f8c053eabfeaac7de80"
+SONIC_MASTER_JUN30_COMMIT="c90df8ae85de95b6ef650fbbd336e84faf3f4232"
 
 declare -a PATCHES=(P1 P2 P3 P4 P5 P6 P7)
 
@@ -258,7 +259,7 @@ sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT pip install wheel' 
 main()
 {
     sonic_buildimage_commit=`git rev-parse HEAD`
-    if [ "$CUR_DIR" != "sonic-buildimage" ]; then
+    if [ "$CUR_DIR" != "Switch-BU---SONIC-Project.sonic-buildimage" ]; then
         log "ERROR: Need to be at sonic-builimage git clone path"
         pre_patch_help
         exit
@@ -273,13 +274,13 @@ main()
 
     date > ${FULL_PATH}/${LOG_FILE}
 
-    apply_patches 
+    #apply_patches 
 
-    misc_workarounds
+    #misc_workarounds
 
-    inband_mgmt_fix
+    #inband_mgmt_fix
 
-    build_kernel_buster
+    #build_kernel_buster
 
     master_armhf_fix
 }
