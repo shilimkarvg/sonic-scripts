@@ -26,16 +26,3 @@ index 7a0a8d1..4cf4a06 100644
          "{{feature}}": {
              "status": "{{status}}"
          }{% if not loop.last %},{% endif -%}
-diff --git a/files/build_templates/init_cfg.json.j2 b/files/build_templates/init_cfg.json.j2
-index 7a0a8d1..4cf4a06 100644
---- a/files/build_templates/init_cfg.json.j2
-+++ b/files/build_templates/init_cfg.json.j2
-@@ -18,7 +18,7 @@
-         }
-     },
-     "FEATURE": {
--{%- for feature, status in [("sflow", "disabled"), ("telemetry", "enabled")] %}
-+{%- for feature, status in [("sflow", "enabled"), ("telemetry", "enabled")] %}
-         "{{feature}}": {
-             "status": "{{status}}"
-         }{% if not loop.last %},{% endif -%}

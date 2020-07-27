@@ -109,6 +109,14 @@ build_kernel_buster()
     patch -p1 < ./armhf_build_kernel_4.19.67_jun09.patch
 }
 
+build_falcon()
+{
+    wget -c https://raw.githubusercontent.com/Marvell-switching/sonic-scripts/master/files/mrvl_JUN30_patch.patch
+    patch -p1 --dry-run < ./mrvl_JUN30_patch.patch
+    echo "Patching mrvl_JUN30_patch.patch"
+    patch -p1 < ./mrvl_JUN30_patch.patch
+}
+
 master_armhf_fix()
 {
 
@@ -390,6 +398,7 @@ main()
     master_armhf_fix
 
     #build_kernel_buster
+    build_falcon
 
     misc_workarounds
 }
