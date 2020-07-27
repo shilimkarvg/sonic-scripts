@@ -57,31 +57,7 @@ pre_patch_help()
 }
 
 
-prereq_kernel()
-{
-    git fetch --all --tags
-    git pull origin master
-    git checkout master
-    #git checkout 90f7c8480c583734832feee6cc232fe5eeb71422
-    git checkout 6650d4eb8d8c1ea4007145e5ffe17c3821298da2
-    git revert --no-edit 66e9dfa591369782eff63f1de09818df3a941b29
-}
 
-util_cfg()
-{
-    git fetch --all --tags
-    git pull origin master
-    git checkout master
-    git checkout db58367dedd88c2f7c0b8e397ecb1e08548662fa
-
-}
-
-frr_cfg()
-{
-    wget https://patch-diff.githubusercontent.com/raw/Azure/sonic-buildimage/pull/4066.diff
-    patch -p1 < 4066.diff
-    rm 4066.diff
-}
 
 installer_patch()
 {
@@ -117,32 +93,39 @@ build_falcon()
     patch -p1 < ./mrvl_JUN30_patch.patch
 }
 
+build_arm64_falcon()
+{
+    wget -c https://raw.githubusercontent.com/Marvell-switching/sonic-scripts/master/files/mrvl_arm64_build_patch.patch
+    patch -p1 --dry-run < ./mrvl_arm64_build_patch.patch
+    echo "Patching mrvl_arm64_build_patch.patch"
+    patch -p1 < ./mrvl_arm64_build_patch.patch
+}
 master_armhf_fix()
 {
 
-    # sonic slave docker
-    wget -c https://raw.githubusercontent.com/Marvell-switching/sonic-scripts/master/files/sonic_slave_docker.patch
-    patch -p1 --dry-run < ./sonic_slave_docker.patch
-    echo "SONIC slave build"
-    patch -p1 < ./sonic_slave_docker.patch
+   # # sonic slave docker
+   # wget -c https://raw.githubusercontent.com/Marvell-switching/sonic-scripts/master/files/sonic_slave_docker.patch
+   # patch -p1 --dry-run < ./sonic_slave_docker.patch
+   # echo "SONIC slave build"
+   # patch -p1 < ./sonic_slave_docker.patch
 
-    # Curl patch
-    wget -c https://raw.githubusercontent.com/Marvell-switching/sonic-scripts/master/files/curl_insecure_wa.patch
-    patch -p1 --dry-run < ./curl_insecure_wa.patch
-    echo "Curl insecure download"
-    patch -p1 < ./curl_insecure_wa.patch
+   # # Curl patch
+   # wget -c https://raw.githubusercontent.com/Marvell-switching/sonic-scripts/master/files/curl_insecure_wa.patch
+   # patch -p1 --dry-run < ./curl_insecure_wa.patch
+   # echo "Curl insecure download"
+   # patch -p1 < ./curl_insecure_wa.patch
 
-    # libyang patch
-    wget -c https://raw.githubusercontent.com/Marvell-switching/sonic-scripts/master/files/libyang_wa.patch
-    patch -p1 --dry-run < ./libyang_wa.patch
-    echo "Libyang fix test"
-    patch -p1 < ./libyang_wa.patch
+   # # libyang patch
+   # wget -c https://raw.githubusercontent.com/Marvell-switching/sonic-scripts/master/files/libyang_wa.patch
+   # patch -p1 --dry-run < ./libyang_wa.patch
+   # echo "Libyang fix test"
+   # patch -p1 < ./libyang_wa.patch
 
-    # sonic_yang patch
-    wget -c https://raw.githubusercontent.com/Marvell-switching/sonic-scripts/master/files/sonic_yang_wa_jun09.patch
-    patch -p1 --dry-run < ./sonic_yang_wa_jun09.patch
-    echo "sonic-yang fix test"
-    patch -p1 < ./sonic_yang_wa_jun09.patch
+   # # sonic_yang patch
+   # wget -c https://raw.githubusercontent.com/Marvell-switching/sonic-scripts/master/files/sonic_yang_wa_jun09.patch
+   # patch -p1 --dry-run < ./sonic_yang_wa_jun09.patch
+   # echo "sonic-yang fix test"
+   # patch -p1 < ./sonic_yang_wa_jun09.patch
 
     # wheel
     sed -i '/keep pip installed/i \
@@ -401,6 +384,8 @@ main()
     build_falcon
 
     misc_workarounds
+
+    build_arm64_falcon
 }
 
 main $@
