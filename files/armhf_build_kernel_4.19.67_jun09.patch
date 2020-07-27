@@ -46,3 +46,14 @@ index 7799b33..e5b3c5d 100644
  UBI_LOAD_OLD='run ubi_sonic_boot_mount_ubi; ubifsload $kernel_addr $image_name_old;ubifsload $fdt_addr $fdt_name_old; ubifsload $initrd_addr $initrd_name_old'
  UBIBOOTCMD='run ubi_sonic_boot_bootargs; run ubi_sonic_boot_load; test -n "$boot_once" && setenv boot_once "" && saveenv; bootz $kernel_addr $initrd_addr $fdt_addr'
  UBIBOOTCMD_OLD='run ubi_sonic_boot_bootargs_old; run ubi_sonic_boot_load_old; test -n "$boot_once" && setenv boot_once "" && saveenv; bootz $kernel_addr $initrd_addr $fdt_addr'
+@@ -104,8 +104,8 @@ prepare_boot_menu() {
+     BORDER='echo "---------------------------------------------------";echo;'
+     fw_setenv ${FW_ARG} print_menu $BORDER $BOOT1 $BOOT2 $BOOT3 $BORDER > /dev/null
+ 
+-    fw_setenv ${FW_ARG} linuxargs "net.ifnames=0 loopfstype=squashfs loop=$image_dir/$FILESYSTEM_SQUASHFS varlog_size=$VAR_LOG" > /dev/null
+-    fw_setenv ${FW_ARG} linuxargs_old "net.ifnames=0 loopfstype=squashfs loop=$image_dir_old/$FILESYSTEM_SQUASHFS varlog_size=$VAR_LOG" > /dev/null
++    fw_setenv ${FW_ARG} linuxargs "net.ifnames=0 loopfstype=squashfs loop=$image_dir/$FILESYSTEM_SQUASHFS varlog_size=$VAR_LOG apparmor=0 " > /dev/null
++    fw_setenv ${FW_ARG} linuxargs_old "net.ifnames=0 loopfstype=squashfs loop=$image_dir_old/$FILESYSTEM_SQUASHFS varlog_size=$VAR_LOG apparmor=0 " > /dev/null
+ 
+     # Set boot configs
+     fw_setenv ${FW_ARG} kernel_addr $kernel_addr > /dev/null

@@ -35,10 +35,10 @@ index a805d34..03d045c 100755
  sudo LANG=C chroot $FILESYSTEM_ROOT rm /tmp/docker.gpg
  sudo LANG=C chroot $FILESYSTEM_ROOT add-apt-repository \
 diff --git a/slave.mk b/slave.mk
-index 3439584..2388583 100644
+index a03c28f..40612bf 100644
 --- a/slave.mk
 +++ b/slave.mk
-@@ -297,7 +297,7 @@ $(addprefix $(DEBS_PATH)/, $(SONIC_ONLINE_DEBS)) : $(DEBS_PATH)/% : .platform \
+@@ -299,7 +299,7 @@ $(addprefix $(DEBS_PATH)/, $(SONIC_ONLINE_DEBS)) : $(DEBS_PATH)/% : .platform \
  	if [ -z '$($*_CACHE_LOADED)' ] ; then
  
  		$(foreach deb,$* $($*_DERIVED_DEBS), \
@@ -47,7 +47,7 @@ index 3439584..2388583 100644
  
  		# Save the target deb into DPKG cache
  		$(call SAVE_CACHE,$*,$@)
-@@ -314,7 +314,7 @@ SONIC_TARGET_LIST += $(addprefix $(DEBS_PATH)/, $(SONIC_ONLINE_DEBS))
+@@ -316,7 +316,7 @@ SONIC_TARGET_LIST += $(addprefix $(DEBS_PATH)/, $(SONIC_ONLINE_DEBS))
  #     SONIC_ONLINE_FILES += $(SOME_NEW_FILE)
  $(addprefix $(FILES_PATH)/, $(SONIC_ONLINE_FILES)) : $(FILES_PATH)/% : .platform
  	$(HEADER)
