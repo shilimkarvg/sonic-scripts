@@ -241,9 +241,9 @@ echo "Switch ARP entry threshold"
 sysctl -w net.ipv4.neigh.default.gc_thresh1=98304
 sysctl -w net.ipv4.neigh.default.gc_thresh2=99304
 sysctl -w net.ipv4.neigh.default.gc_thresh3=109304
-sysctl -w net.ipv6.neigh.default.gc_thresh1=8000
-sysctl -w net.ipv6.neigh.default.gc_thresh2=16000
-sysctl -w net.ipv6.neigh.default.gc_thresh3=32000
+sysctl -w net.ipv6.neigh.default.gc_thresh1=65536
+sysctl -w net.ipv6.neigh.default.gc_thresh2=75536
+sysctl -w net.ipv6.neigh.default.gc_thresh3=75536
 EOF
 
 }
