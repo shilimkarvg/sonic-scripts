@@ -1,14 +1,3 @@
-diff --git a/build_debian.sh b/build_debian.sh 
-index 550585c..8c364b0 100755
---- a/build_debian.sh
-+++ b/build_debian.sh
-@@ -314,6 +314,8 @@ sudo LANG=C DEBIAN_FRONTEND=noninteractive chroot $FILESYSTEM_ROOT apt-get -y in
-     cron                    \
-     haveged
-
-
- if [[ $CONFIGURED_ARCH == amd64 ]]; then
- ## Pre-install the fundamental packages for amd64 (x86)
 diff --git a/dockers/docker-base-buster/Dockerfile.j2 b/dockers/docker-base-buster/Dockerfile.j2
 index 1959bb5..19c04bb 100644
 --- a/dockers/docker-base-buster/Dockerfile.j2

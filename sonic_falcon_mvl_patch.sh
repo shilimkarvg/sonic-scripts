@@ -20,8 +20,8 @@ url="https://github.com/Azure"
 urlsai="https://patch-diff.githubusercontent.com/raw/opencomputeproject"
 
 
-declare -A P1=( [NAME]=sonic-buildimage [DIR]=. [PR]="3687 4016" [URL]="$url" [PREREQ]="" [POSTREQ]="")
-declare -A P2=( [NAME]=sonic-swss [DIR]=src/sonic-swss [PR]="1325" [URL]="$url" [PREREQ]="" )
+declare -A P1=( [NAME]=sonic-buildimage [DIR]=. [PR]="3687" [URL]="$url" [PREREQ]="" [POSTREQ]="")
+declare -A P2=( [NAME]=sonic-swss [DIR]=src/sonic-swss [PR]="1325 1273" [URL]="$url" [PREREQ]="" )
 declare -A P3=( [NAME]=sonic-utilities [DIR]=src/sonic-utilities [PR]="" [URL]="$url" [PREREQ]="" [POSTREQ]="installer_patch")
 declare -A P4=( [NAME]=sonic-linux-kernel [DIR]=src/sonic-linux-kernel [PR]="" [URL]="$url" [PREREQ]="apply_buster_kernel" )
 declare -A P5=( [NAME]=sonic-snmpagent [DIR]=src/sonic-snmpagent [PR]="134" [URL]="$url" [PREREQ]="" )
@@ -101,7 +101,7 @@ build_arm64_falcon()
     echo "Patching mrvl_arm64_build_patch.patch"
     patch -p1 < ./mrvl_arm64_build_patch.patch
 }
-master_armhf_fix()
+master_sonic_fix()
 {
 
    # # sonic slave docker
@@ -153,7 +153,11 @@ sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT pip install wheel' 
     patch -p1 --dry-run < ./sonic_generate_dump.patch
     patch -p1 < ./sonic_generate_dump.patch
     popd
+   
+    # Starting teamd after syncd. issue(4015)
+   sed -i 's/After=updategraph.service/After=updategraph.service syncd.service/g' files/build_templates/per_namespace/teamd.service.j2
 }
+
 
 
 apply_patches()
@@ -388,8 +392,8 @@ main()
 
     misc_workarounds
 
-    master_armhf_fix
-    
+    master_sonic_fix    
+
     build_arm64_falcon
 }
 
