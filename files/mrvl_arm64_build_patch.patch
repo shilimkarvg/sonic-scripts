@@ -6,8 +6,6 @@ index 550585c..8c364b0 100755
      cron                    \
      haveged
 
-+sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT pip install wheel
-+sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT pip3 install wheel
 
  if [[ $CONFIGURED_ARCH == amd64 ]]; then
  ## Pre-install the fundamental packages for amd64 (x86)

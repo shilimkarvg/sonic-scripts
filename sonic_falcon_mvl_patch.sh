@@ -14,17 +14,18 @@
 
 SONIC_MASTER_JUN30_COMMIT="96fedf1ae9ebcc6604daced6b7dd577eaeb26883"
 
-declare -a PATCHES=(P1 P2 P3 P4 P5)
+declare -a PATCHES=(P1 P2 P3 P4 P5 P6)
 
 url="https://github.com/Azure"
 urlsai="https://patch-diff.githubusercontent.com/raw/opencomputeproject"
 
 
 declare -A P1=( [NAME]=sonic-buildimage [DIR]=. [PR]="3687 4016" [URL]="$url" [PREREQ]="" [POSTREQ]="")
-declare -A P2=( [NAME]=sonic-swss [DIR]=src/sonic-swss [PR]="" [URL]="$url" [PREREQ]="" )
+declare -A P2=( [NAME]=sonic-swss [DIR]=src/sonic-swss [PR]="1325" [URL]="$url" [PREREQ]="" )
 declare -A P3=( [NAME]=sonic-utilities [DIR]=src/sonic-utilities [PR]="" [URL]="$url" [PREREQ]="" [POSTREQ]="installer_patch")
 declare -A P4=( [NAME]=sonic-linux-kernel [DIR]=src/sonic-linux-kernel [PR]="" [URL]="$url" [PREREQ]="apply_buster_kernel" )
 declare -A P5=( [NAME]=sonic-snmpagent [DIR]=src/sonic-snmpagent [PR]="134" [URL]="$url" [PREREQ]="" )
+declare -A P6=( [NAME]=sonic-sairedis [DIR]=src/sonic-sairedis [PR]="643" [URL]="$url" [PREREQ]="" )
 #
 # END of CONFIGURATIONS
 #
@@ -227,7 +228,7 @@ sysctl -w net.ipv4.neigh.default.gc_thresh2=99304
 sysctl -w net.ipv4.neigh.default.gc_thresh3=109304
 sysctl -w net.ipv6.neigh.default.gc_thresh1=65536
 sysctl -w net.ipv6.neigh.default.gc_thresh2=75536
-sysctl -w net.ipv6.neigh.default.gc_thresh3=75536
+sysctl -w net.ipv6.neigh.default.gc_thresh3=85536
 EOF
 
 }
