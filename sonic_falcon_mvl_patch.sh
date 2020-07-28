@@ -14,7 +14,7 @@
 
 SONIC_MASTER_JUN30_COMMIT="96fedf1ae9ebcc6604daced6b7dd577eaeb26883"
 
-declare -a PATCHES=(P1 P2 P3 P4)
+declare -a PATCHES=(P1 P2 P3 P4 P5)
 
 url="https://github.com/Azure"
 urlsai="https://patch-diff.githubusercontent.com/raw/opencomputeproject"
@@ -23,8 +23,8 @@ urlsai="https://patch-diff.githubusercontent.com/raw/opencomputeproject"
 declare -A P1=( [NAME]=sonic-buildimage [DIR]=. [PR]="3687 4016" [URL]="$url" [PREREQ]="" [POSTREQ]="")
 declare -A P2=( [NAME]=sonic-swss [DIR]=src/sonic-swss [PR]="" [URL]="$url" [PREREQ]="" )
 declare -A P3=( [NAME]=sonic-utilities [DIR]=src/sonic-utilities [PR]="" [URL]="$url" [PREREQ]="" [POSTREQ]="installer_patch")
-declare -A P4=( [NAME]=sonic-linux-kernel [DIR]=src/sonic-linux-kernel [PR]="" [URL]="$url" [PREREQ]="" )
-
+declare -A P4=( [NAME]=sonic-linux-kernel [DIR]=src/sonic-linux-kernel [PR]="" [URL]="$url" [PREREQ]="apply_buster_kernel" )
+declare -A P5=( [NAME]=sonic-snmpagent [DIR]=src/sonic-snmpagent [PR]="134" [URL]="$url" [PREREQ]="" )
 #
 # END of CONFIGURATIONS
 #
@@ -134,6 +134,7 @@ sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT pip install wheel' 
     # Update SAI 1.6.3
     sed -i 's/1.5.1/1.6.3/g' platform/marvell-armhf/sai.mk
     sed -i 's/1.5.1/1.6.3/g' platform/marvell-arm64/sai.mk
+    sed -i 's/1.5.1/1.6.3/g' platform/marvell/sai.mk
 
     # Mac address fix
     sed -i  "s/'cat'/'cat '/g" src/sonic-config-engine/sonic_device_util.py
@@ -378,13 +379,16 @@ main()
 
     #build_fixes
 
-    master_armhf_fix
 
-    #build_kernel_buster
+  
+    build_kernel_buster
+    
     build_falcon
 
     misc_workarounds
 
+    master_armhf_fix
+    
     build_arm64_falcon
 }
 

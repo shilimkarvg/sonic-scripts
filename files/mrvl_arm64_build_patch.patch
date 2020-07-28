@@ -37,18 +37,6 @@ index f573e94..1be69e7 100644
  # Update apt cache and
  # pre-install fundamental packages
  RUN apt-get update &&        \
-diff --git a/platform/marvell-arm64/sai.mk b/platform/marvell-arm64/sai.mk
-index ebdd703..aa48fbd 100644
---- a/platform/marvell-arm64/sai.mk
-+++ b/platform/marvell-arm64/sai.mk
-@@ -1,6 +1,6 @@
- # Marvell SAI
-
--export MRVL_SAI_VERSION = 1.5.1
-+export MRVL_SAI_VERSION = 1.6.1
- export MRVL_SAI = mrvllibsai_$(PLATFORM_ARCH)_$(MRVL_SAI_VERSION).deb
-
- $(MRVL_SAI)_SRC_PATH = $(PLATFORM_PATH)/sai
 diff --git a/platform/marvell-arm64/sonic_fit.its b/platform/marvell-arm64/sonic_fit.its
 index 9b09d4c..c0aba6e 100644
 --- a/platform/marvell-arm64/sonic_fit.its
@@ -72,16 +60,3 @@ index 9b09d4c..c0aba6e 100644
              arch = "arm64";
              os = "linux";
 
-diff --git a/sonic-slave-jessie/Dockerfile.j2 b/sonic-slave-jessie/Dockerfile.j2
-index 2df3828..c1819ee 100644
---- a/sonic-slave-jessie/Dockerfile.j2
-+++ b/sonic-slave-jessie/Dockerfile.j2
-@@ -33,7 +33,7 @@ RUN echo "deb [arch=arm64] http://archive.debian.org/debian jessie main contrib
- ## Make apt-get non-interactive
- ENV DEBIAN_FRONTEND=noninteractive
-
--RUN apt-get update && apt-get install -y \
-+RUN apt-get update && apt-get install -y --force-yes \
-         apt-utils \
-         default-jre-headless \
-         openssh-server \
