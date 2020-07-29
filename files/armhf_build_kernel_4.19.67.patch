@@ -31,18 +31,6 @@ index 550585c..e50c834 100755
  ## Note: keep pip installed for maintainance purpose
  
  ## Get gcc and python dev pkgs
-diff --git a/rules/linux-kernel.mk b/rules/linux-kernel.mk
-index 359b24e..0b906a2 100644
---- a/rules/linux-kernel.mk
-+++ b/rules/linux-kernel.mk
-@@ -1,6 +1,6 @@
- # linux kernel package
- 
--KVERSION_SHORT = 4.19.0-6-2
-+KVERSION_SHORT = 4.19.0-6
- KVERSION = $(KVERSION_SHORT)-$(CONFIGURED_ARCH)
- KERNEL_VERSION = 4.19.67
- KERNEL_SUBVERSION = 2+deb10u2
 diff --git a/platform/marvell-armhf/platform.conf b/platform/marvell-armhf/platform.conf
 index 7799b33..e5b3c5d 100644
 --- a/platform/marvell-armhf/platform.conf

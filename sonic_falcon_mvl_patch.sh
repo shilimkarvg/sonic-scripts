@@ -22,7 +22,7 @@ urlsai="https://patch-diff.githubusercontent.com/raw/opencomputeproject"
 
 declare -A P1=( [NAME]=sonic-buildimage [DIR]=. [PR]="3687" [URL]="$url" [PREREQ]="" [POSTREQ]="")
 declare -A P2=( [NAME]=sonic-swss [DIR]=src/sonic-swss [PR]="1325 1273 1369" [URL]="$url" [PREREQ]="" )
-declare -A P3=( [NAME]=sonic-utilities [DIR]=src/sonic-utilities [PR]="" [URL]="$url" [PREREQ]="" [POSTREQ]="installer_patch")
+declare -A P3=( [NAME]=sonic-utilities [DIR]=src/sonic-utilities [PR]="" [URL]="$url" [PREREQ]="" [POSTREQ]="")
 declare -A P4=( [NAME]=sonic-linux-kernel [DIR]=src/sonic-linux-kernel [PR]="" [URL]="$url" [PREREQ]="apply_buster_kernel" )
 declare -A P5=( [NAME]=sonic-snmpagent [DIR]=src/sonic-snmpagent [PR]="134" [URL]="$url" [PREREQ]="" )
 declare -A P6=( [NAME]=sonic-sairedis [DIR]=src/sonic-sairedis [PR]="643" [URL]="$url" [PREREQ]="" )
@@ -69,8 +69,6 @@ installer_patch()
 
 apply_buster_kernel()
 {
-    git checkout master
-    git checkout e2dbd4ced8c32d43844ae1e2066624113a5e0e1d
     wget -c https://raw.githubusercontent.com/Marvell-switching/sonic-scripts/master/files/armhf_kernel_4.19.67.patch
 
     patch -p1 --dry-run < ./armhf_kernel_4.19.67.patch
@@ -156,6 +154,8 @@ sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT pip install wheel' 
    
     # Starting teamd after syncd. issue(4015)
    sed -i 's/After=updategraph.service/After=updategraph.service syncd.service/g' files/build_templates/per_namespace/teamd.service.j2
+   #architecture fix
+   sed -i 's/Architecture: amd64/Architecture: all/g' src/sonic-mgmt-common/debian/control
 }
 
 
