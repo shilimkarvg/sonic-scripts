@@ -155,7 +155,7 @@ sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT pip install wheel' 
     # Starting teamd after syncd. issue(4015)
    sed -i 's/After=updategraph.service/After=updategraph.service syncd.service/g' files/build_templates/per_namespace/teamd.service.j2
    #architecture fix
-   sed -i 's/Architecture: amd64/Architecture: all/g' src/sonic-mgmt-common/debian/control
+   sed -i 's/Architecture: amd64/Architecture: any/g' src/sonic-mgmt-common/debian/control
 }
 
 
