@@ -26,3 +26,22 @@ index 7a0a8d1..4cf4a06 100644
          "{{feature}}": {
              "status": "{{status}}"
          }{% if not loop.last %},{% endif -%}
+diff --git a/debian/control b/debian/control
+index e2e8857..94926fc 100644
+--- a/debian/control
++++ b/debian/control
+@@ -9,12 +9,12 @@ Section: net
+ 
+ Package: sonic-mgmt-common
+ Priority: extra  
+-Architecture: amd64
++Architecture: all
+ Depends: ${shlibs:Depends}, ${misc:Depends}  
+ Description: SONiC Management Infrastructure
+ 
+ Package: sonic-mgmt-common-codegen
+ Priority: extra  
+-Architecture: amd64
++Architecture: all
+ Depends: ${shlibs:Depends}, ${misc:Depends}  
+ Description: SONiC Management Infrastructure generated code

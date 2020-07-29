@@ -21,7 +21,7 @@ urlsai="https://patch-diff.githubusercontent.com/raw/opencomputeproject"
 
 
 declare -A P1=( [NAME]=sonic-buildimage [DIR]=. [PR]="3687" [URL]="$url" [PREREQ]="" [POSTREQ]="")
-declare -A P2=( [NAME]=sonic-swss [DIR]=src/sonic-swss [PR]="1325 1273" [URL]="$url" [PREREQ]="" )
+declare -A P2=( [NAME]=sonic-swss [DIR]=src/sonic-swss [PR]="1325 1273 1369" [URL]="$url" [PREREQ]="" )
 declare -A P3=( [NAME]=sonic-utilities [DIR]=src/sonic-utilities [PR]="" [URL]="$url" [PREREQ]="" [POSTREQ]="installer_patch")
 declare -A P4=( [NAME]=sonic-linux-kernel [DIR]=src/sonic-linux-kernel [PR]="" [URL]="$url" [PREREQ]="apply_buster_kernel" )
 declare -A P5=( [NAME]=sonic-snmpagent [DIR]=src/sonic-snmpagent [PR]="134" [URL]="$url" [PREREQ]="" )
@@ -75,15 +75,15 @@ apply_buster_kernel()
 
     patch -p1 --dry-run < ./armhf_kernel_4.19.67.patch
     echo "Patching 4.19.67 armhf"
-    #patch -p1 < ./armhf_kernel_4.19.67.patch
+    patch -p1 < ./armhf_kernel_4.19.67.patch
 }
 
 build_kernel_buster()
 {
-    wget -c https://raw.githubusercontent.com/Marvell-switching/sonic-scripts/master/files/armhf_build_kernel_4.19.67_jun09.patch
-    patch -p1 --dry-run < ./armhf_build_kernel_4.19.67_jun09.patch
+    wget -c https://raw.githubusercontent.com/Marvell-switching/sonic-scripts/master/files/armhf_build_kernel_4.19.67.patch
+    patch -p1 --dry-run < ./armhf_build_kernel_4.19.67.patch
     echo "Patching 4.19.67 build rules"
-    patch -p1 < ./armhf_build_kernel_4.19.67_jun09.patch
+    patch -p1 < ./armhf_build_kernel_4.19.67.patch
 }
 
 build_falcon()
@@ -226,13 +226,6 @@ sed -i "s/switchMacAddress=.*/switchMacAddress=\$MAC_ADDR/g" /usr/share/sonic/de
 sed -i "s/switchMacAddress=.*/switchMacAddress=\$MAC_ADDR/g" /usr/share/sonic/device/x86_64-marvell_db98cx8580_16cd-r0/db98cx8580_16cd/profile.ini
 sed -i "s/switchMacAddress=.*/switchMacAddress=\$MAC_ADDR/g" /usr/share/sonic/device/x86_64-marvell_db98cx8540_16cd-r0/db98cx8540_16cd/profile.ini
 find /usr/share/sonic/device/*db98cx* -name profile.ini | xargs sed -i "s/switchMacAddress=.*/switchMacAddress=\$MAC_ADDR/g"
-echo "Switch ARP entry threshold"
-sysctl -w net.ipv4.neigh.default.gc_thresh1=98304
-sysctl -w net.ipv4.neigh.default.gc_thresh2=99304
-sysctl -w net.ipv4.neigh.default.gc_thresh3=109304
-sysctl -w net.ipv6.neigh.default.gc_thresh1=65536
-sysctl -w net.ipv6.neigh.default.gc_thresh2=75536
-sysctl -w net.ipv6.neigh.default.gc_thresh3=85536
 EOF
 
 }
@@ -290,6 +283,9 @@ misc_workarounds()
     sed -i 's/apt-get install -y/apt-get install --force-yes -y/'g sonic-slave-jessie/Dockerfile.j2
     sed -i 's/apt-get -y/apt-get --force-yes -y/'g sonic-slave-jessie/Dockerfile.j2
 
+    #8 Add Falcon module  
+    wget -c https://raw.githubusercontent.com/Marvell-switching/sonic-scripts/master/files/falcon_modules.patch
+    patch -p1 < falcon_modules.patch
 
     #9 TODO: Intel USB access
     wget -c https://raw.githubusercontent.com/Marvell-switching/sonic-scripts/master/files/sonic_usb_install_slow.patch
