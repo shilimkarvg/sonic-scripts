@@ -156,6 +156,8 @@ sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT pip install wheel' 
    sed -i 's/After=updategraph.service/After=updategraph.service syncd.service/g' files/build_templates/per_namespace/teamd.service.j2
    #architecture fix
    sed -i 's/Architecture: amd64/Architecture: any/g' src/sonic-mgmt-common/debian/control
+   #disable management frmwork
+   sed -i 's/ENABLE_MGMT_FRAMEWORK = y/ENABLE_MGMT_FRAMEWORK = N/g' rules/config
 }
 
 
