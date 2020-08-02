@@ -8,7 +8,7 @@ index 0000000..0f76ae3
 +
 +# Add platform specific MOD
 +LINUX_KERNEL_MOD = linux-module-1.0.0-amd64.deb
-+$(LINUX_KERNEL_DTB)_URL = https://github.com/Marvell-switching/sonic-marvell-binaries/raw/master/amd64/kernel/$(LINUX_KERNEL_MOD)
++$(LINUX_KERNEL_MOD)_URL = https://github.com/Marvell-switching/sonic-marvell-binaries/raw/master/amd64/kernel/$(LINUX_KERNEL_MOD)
 +SONIC_ONLINE_DEBS += $(LINUX_KERNEL_MOD)
 diff --git a/platform/marvell/rules.mk b/platform/marvell/rules.mk
 index c01e1e4..4435d3a 100644
