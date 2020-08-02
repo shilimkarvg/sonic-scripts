@@ -22,3 +22,12 @@ index c01e1e4..4435d3a 100644
  
  SONIC_ALL += $(SONIC_ONE_IMAGE) \
               $(DOCKER_FPM) \
+diff --git a/platform/marvell/one-image.mk b/platform/marvell/one-image.mk
+index fcac038..0b4176a 100644
+--- a/platform/marvell/one-image.mk
++++ b/platform/marvell/one-image.mk
+@@ -11,3 +11,4 @@ else
+ $(SONIC_ONE_IMAGE)_DOCKERS = $(SONIC_INSTALL_DOCKER_IMAGES)
+ endif
+ SONIC_INSTALLERS += $(SONIC_ONE_IMAGE)
++$(SONIC_ONE_IMAGE)_INSTALLS += $(LINUX_KERNEL_MOD)
